@@ -1,13 +1,11 @@
 """Core abstract method for feature extractors."""
 
 from abc import ABC, abstractmethod
-from typing import Callable, TypeVar
+from typing import Callable
 
 import numpy as np
 import torch
 from PIL import Image
-
-Transformed = TypeVar("Transformed")
 
 
 class Extractor(ABC):
@@ -23,36 +21,58 @@ class Extractor(ABC):
     @property
     def feature_extractor(self) -> torch.nn.Module:
         """
-        Feature extractor module
+        Feature extractor module.
 
-        Returns:
+        Returns
+        -------
             feature_extractor: torch.nn.Module
         """
         return self._feature_extractor
 
+    @feature_extractor.setter
+    def feature_extractor(self, feature_extractor_module: torch.nn.Module):
+        """Set a new feature extractor module.
+
+        Parameters
+        ----------
+        feature_extractor_module: feature_extractor_module
+        """
+        self._feature_extractor = feature_extractor_module
 
     @property
-    def transform(self) -> Callable[[Image.Image], Transformed]:
+    def transform(self) -> Callable[[Image.Image], torch.Tensor]:
         """
-        Transform method to apply element wise.
-        Default is identity
+        Transform method to apply element wise. Should return tensors.
+
+        Default is identity.
 
         Returns
         -------
-        transform: Callable[[PIL.Image.Image], Transformed]
+        transform: Callable[[PIL.Image.Image], torch.Tensor]
         """
         return self._transform
 
+    @transform.setter
+    def transform(self, transform_function: Callable[[Image.Image], torch.Tensor]):
+        """Set a new transform function to the extractor.
+
+        Parameters
+        ----------
+        transform_function: Callable[[PIL.Image.Image], Transformed]
+            The transform function to be set for the extractor.
+        """
+        self._transform = transform_function
 
     @abstractmethod
-    def __call__(self, images: Transformed) -> np.ndarray:
+    def __call__(self, images: torch.Tensor) -> np.ndarray:
         """
         Compute and return the MAP features.
 
         Parameters
         ----------
-        images: Transformed
-            input of size (N_TILES, N_CHANNELS, DIM_X, DIM_Y). N_TILES=1 for an image
+        images: torch.Tensor
+            Input of size (N_TILES, 3, DIM_X, DIM_Y). N_TILES=1 for an image,
+            usually DIM_X = DIM_Y = 224.
 
         Returns
         -------

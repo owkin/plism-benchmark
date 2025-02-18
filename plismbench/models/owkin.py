@@ -2,15 +2,15 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 import timm
-from timm.data import resolve_data_config
-from timm.data.transforms_factory import create_transform
 import torch
-from plismbench.models.extractor import Extractor
-from plismbench.models.utils import DEFAULT_DEVICE, prepare_module
 from torchvision import transforms
 
+from plismbench.models.extractor import Extractor
+from plismbench.models.utils import DEFAULT_DEVICE, prepare_module
 
 
 class H0Mini(Extractor):
@@ -35,49 +35,55 @@ class H0Mini(Extractor):
         device: int | list[int] | None = DEFAULT_DEVICE,
         mixed_precision: bool = False,
     ):
-        super(H0Mini).__init__()
-        self.device = device
+        super().__init__()
         self.mixed_precision = mixed_precision
 
-        timm_kwargs={'mlp_layer': timm.layers.SwiGLUPacked, 'act_layer': torch.nn.SiLU}
+        timm_kwargs: dict[str, Any] = {
+            "mlp_layer": timm.layers.SwiGLUPacked,
+            "act_layer": torch.nn.SiLU,
+        }
         feature_extractor = timm.create_model(
-            "hf-hub:owkin/H0-mini",
-            pretrained=True,
-            **timm_kwargs
+            "hf-hub:owkin/H0-mini", pretrained=True, **timm_kwargs
         )
-        self.processor = create_transform(
-            **resolve_data_config(
-                feature_extractor.pretrained_cfg, model=feature_extractor
-            )
-        )
+
         self.feature_extractor, self.device = prepare_module(
             feature_extractor,
-            self.device,
+            device,
             self.mixed_precision,
         )
         if self.device is None:
             self.feature_extractor = self.feature_extractor.module
 
-    def process(self, image) -> torch.Tensor:
-        """Process input images."""
-        h0_mini_input = self.processor(image)
-        return h0_mini_input
-
-    @property
-    def transform(self) -> transforms.Lambda:
+    @property  # type: ignore
+    def transform(self) -> transforms.Compose:
         """Transform method to apply element wise."""
-        return transforms.Lambda(self.process)
-
+        return transforms.Compose(
+            [
+                transforms.Resize(224),
+                transforms.ToTensor(),
+                transforms.Normalize(
+                    mean=(0.707223, 0.578729, 0.703617),
+                    std=(0.211883, 0.230117, 0.177517),
+                ),
+            ]
+        )
 
     def __call__(self, images: torch.Tensor) -> np.ndarray:
         """Compute and return features.
 
-        Args:
-            images (torch.Tensor): Input of size (n_tiles, n_channels, dim_x, dim_y).
+        Parameters
+        ----------
+        images: torch.Tensor
+            Input of size (n_tiles, n_channels, dim_x, dim_y).
 
-        Returns:
+        Returns
+        -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
         outputs = self.feature_extractor(images.to(self.device))
-        features = outputs.unsqueeze(1).unsqueeze(1)
+        features = outputs[:, 0, :]  # return cls token only
+        # Concatenate with mean of patch tokens:
+        # class_token = outputs[:, 0, :]
+        # patch_tokens = output[:, 5:, :]
+        # features = torch.cat([class_token, patch_tokens.mean(1)], dim=-1)
         return features.cpu().numpy()

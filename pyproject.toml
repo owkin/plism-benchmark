@@ -43,6 +43,7 @@ datasets = "^3.3.1"
 loguru = "^0.7.3"
 timm = "^1.0.14"
 pre-commit = "^4.1.0"
+typer = "^0.15.1"
 
 [tool.poetry.group.dev]
 optional = true
@@ -151,3 +152,6 @@ convention = "numpy"
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
+
+[tool.poetry.scripts]
+plismbench = "plismbench.engine.cli:app"

@@ -1,7 +1,9 @@
 """Unit tests for :mod:`plismbench.models`."""
 
-from plismbench.models.owkin import H0Mini
 from enum import Enum
+
+from plismbench.models.owkin import H0Mini
+
 
 class StringEnum(Enum):
     """A base class string enumerator."""
@@ -27,7 +29,7 @@ class FeatureExtractorsEnum(StringEnum):
         if self is self.H0_MINI:
             feature_extractor = H0Mini(
                 device=device,
-                mixed_precision=True, # don't change this value
+                mixed_precision=True,  # don't change this value
             )
         else:
             raise NotImplementedError(f"Extractor {self} is not supported.")
