@@ -44,6 +44,7 @@ loguru = "^0.7.3"
 timm = "^1.0.14"
 pre-commit = "^4.1.0"
 typer = "^0.15.1"
+h5py = "^3.12.1"
 
 [tool.poetry.group.dev]
 optional = true

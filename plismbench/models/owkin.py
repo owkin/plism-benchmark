@@ -17,7 +17,7 @@ class H0Mini(Extractor):
     """H0-mini model available on Hugging-Face (1).
 
     .. note::
-        (1) https://huggingface.co/owkin/H0-mini
+        (1) https://huggingface.co/owkin/H0-minid
 
     Parameters
     ----------
@@ -55,11 +55,15 @@ class H0Mini(Extractor):
 
     @property  # type: ignore
     def transform(self) -> transforms.Compose:
-        """Transform method to apply element wise."""
+        """Transform method to apply element wise.
+
+        This function is applied on ``np.ndarray`` and not ``PIL.Image.Image``,
+        no need for `PIL` related transformation as inputs have a fixed shape
+        of 224 x 224.
+        """
         return transforms.Compose(
             [
-                transforms.Resize(224),
-                transforms.ToTensor(),
+                transforms.ToTensor(),  # swap axes
                 transforms.Normalize(
                     mean=(0.707223, 0.578729, 0.703617),
                     std=(0.211883, 0.230117, 0.177517),
