@@ -17,7 +17,7 @@ class H0Mini(Extractor):
     """H0-mini model available on Hugging-Face (1).
 
     .. note::
-        (1) https://huggingface.co/owkin/H0-mini
+        (1) https://huggingface.co/owkin/H0-minid
 
     Parameters
     ----------
@@ -58,8 +58,7 @@ class H0Mini(Extractor):
         """Transform method to apply element wise."""
         return transforms.Compose(
             [
-                transforms.Resize(224),
-                transforms.ToTensor(),
+                transforms.ToTensor(),  # swap axes
                 transforms.Normalize(
                     mean=(0.707223, 0.578729, 0.703617),
                     std=(0.211883, 0.230117, 0.177517),
