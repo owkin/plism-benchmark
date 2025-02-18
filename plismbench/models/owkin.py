@@ -14,7 +14,7 @@ from plismbench.models.utils import DEFAULT_DEVICE, prepare_module
 
 
 class H0Mini(Extractor):
-    """H0-mini model available on Hugging-Face [1]_.
+    """H0-mini model available on Hugging-Face (1)_.
 
     Parameters
     ----------
@@ -25,9 +25,8 @@ class H0Mini(Extractor):
     mixed_precision: bool = True
         Whether to use mixed_precision.
 
-    Reference
-    ---------
-    .. [1] https://huggingface.co/owkin/H0-mini
+    .. note::
+        (1) https://huggingface.co/owkin/H0-mini
     """
 
     def __init__(

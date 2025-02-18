@@ -1,5 +1,7 @@
 """Unit tests for :mod:`plismbench.models`."""
 
+from __future__ import annotations
+
 from enum import Enum
 
 from plismbench.models.owkin import H0Mini
