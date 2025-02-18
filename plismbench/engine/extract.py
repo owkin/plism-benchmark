@@ -145,11 +145,6 @@ def run_extract(
     # Create export directory if it doesn't exist
     export_dir.mkdir(exist_ok=True, parents=True)
 
-    # You first need to login with your HF token
-    from huggingface_hub import login
-
-    login(new_session=False)
-
     # Initialize the feature extractor
     feature_extractor = FeatureExtractorsEnum[feature_extractor_name.upper()].init(
         device=device

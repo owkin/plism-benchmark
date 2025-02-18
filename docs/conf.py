@@ -62,8 +62,8 @@ package_distribution = pkg_resources.get_distribution('owkin-plismbench')
 
 # General information about the project.
 project = 'PLISM robustness benchmark'
-copyright = f'{datetime.date.today().year}, Owkin Data Science Team'
-author = 'Owkin Data Science Team'
+copyright = f'{datetime.date.today().year}, Owkin Inc.'
+author = 'Owkin Inc.'
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -139,7 +139,7 @@ latex_elements: dict = {
 # (source start file, target name, title, author, documentclass
 # [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'plismbench.tex', project, 'Owkin Data Scientists', 'manual'),
+    (master_doc, 'plismbench.tex', project, 'Owkin Inc.', 'manual'),
 ]
 
 # -- Options for manual page output ------------------------------------

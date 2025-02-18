@@ -37,8 +37,12 @@ def extract(
         int, typer.Option("--batch-size", help="Features extraction batch size.")
     ] = 32,
 ):
-    """Tile a slide cohort and store the extracted features."""
-    if extractor.upper() not in FeatureExtractorsEnum.choices():
+    """Perform features extraction on PLISM histology tiles dataset streamed from Hugging-Face.
+
+    Example:
+    >>> plismbench extract --extractor h0_mini --batch-size 32 --export-dir $HOME/tmp/
+    """
+    if extractor not in FeatureExtractorsEnum.choices():
         raise NotImplementedError(f"Extractor {extractor} not supported.")
     run_extract(
         feature_extractor_name=extractor,
@@ -46,6 +50,14 @@ def extract(
         device=device,
         batch_size=batch_size,
     )
+
+
+@app.command()
+def login():
+    """Login to HuggingFace to download PLISM histology tiles dataset."""
+    from huggingface_hub import login
+
+    login(new_session=False)
 
 
 if __name__ == "__main__":

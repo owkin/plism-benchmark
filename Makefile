@@ -36,12 +36,8 @@ endif
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-config: ## configure poetry with Owkin's PyPi credentials.
-	$(eval USERNAME ?= $(shell bash -c 'read -p "PyPi Username: " username; echo $$username'))
-	$(eval PASSWORD ?= $(shell bash -c 'read -s -p "PyPi Password: " pwd; echo $$pwd'))
+config: ## configure poetry
 	poetry config virtualenvs.in-project true
-	poetry config repositories.owkin https://pypi.owkin.com/simple/
-	poetry config http-basic.owkin $(USERNAME) $(PASSWORD)
 
 lock: ## Generate a new poetry.lock file (To be done after adding new requirements to pyproject.toml)
 	poetry lock

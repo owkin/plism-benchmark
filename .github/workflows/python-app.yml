@@ -5,30 +5,24 @@ on:
   push:
     branches:
       - main
-      - master # Just in case the repo has the deprecated main branch name
 
 jobs:
   testing:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: ["3.9", "3.10", "3.11"]
+        python: ["3.10"]
     name: Testing Python ${{ matrix.python }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
 
       - name: Install Poetry
         run: make install-poetry
-
-      - name: Pypi authentication
-        run: |
-          poetry config repositories.owkin https://pypi.owkin.com/simple/
-          poetry config http-basic.owkin "${{ secrets.PYPI_USERNAME }}" "${{ secrets.PYPI_PASSWORD }}"
 
       - name: Install dependencies
         run: poetry install --all-extras --with=testing
@@ -40,19 +34,14 @@ jobs:
     runs-on: ubuntu-latest
     name: Test Linting
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.9"
+          python-version: "3.10"
 
       - name: Install Poetry
         run: make install-poetry
-
-      - name: Pypi authentication
-        run: |
-          poetry config repositories.owkin https://pypi.owkin.com/simple/
-          poetry config http-basic.owkin "${{ secrets.PYPI_USERNAME }}" "${{ secrets.PYPI_PASSWORD }}"
 
       - name: Install dependencies
         run: poetry install --all-extras --with=linting,docs
