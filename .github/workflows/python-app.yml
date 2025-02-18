@@ -27,10 +27,9 @@ jobs:
       - name: Install Hugging Face CLI
         run: pip install huggingface_hub
 
-      - name: Login to Hugging Face
-        run: huggingface-cli login
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      - name: Log in to Hugging Face
+        run: |
+          python -c "from huggingface_hub import login; login(token='${{ secrets.HF_TOKEN }}', new_session=False)"
 
       - name: Install dependencies
         run: poetry install --all-extras --with=testing
