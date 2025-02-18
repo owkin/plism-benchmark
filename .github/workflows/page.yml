@@ -2,10 +2,9 @@ name: Deploy doc
 
 on:
   # Runs on pushes targeting the main branch (uncomment to next 3 lines to enable)
-  #  push:
-  #    branches:
-  #      - main
-  #      - master
+  push:
+    branches:
+      - main
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
