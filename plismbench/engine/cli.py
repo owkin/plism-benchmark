@@ -27,7 +27,10 @@ def extract(
         Path,
         typer.Option(
             "--export-dir",
-            help="The folder where features will be stored",
+            help=(
+                "The root folder where features will be stored."
+                " The final export directory is ``export_dir / extractor``"
+            ),
         ),
     ],
     device: Annotated[
@@ -48,7 +51,7 @@ def extract(
         raise NotImplementedError(f"Extractor {extractor} not supported.")
     run_extract(
         feature_extractor_name=extractor,
-        export_dir=export_dir,
+        export_dir=export_dir / extractor,
         device=device,
         batch_size=batch_size,
     )
