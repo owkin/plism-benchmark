@@ -1,0 +1,70 @@
+name: Python dev
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master # Just in case the repo has the deprecated main branch name
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.10", "3.11"]
+    name: Testing Python ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install Poetry
+        run: make install-poetry
+
+      - name: Pypi authentication
+        run: |
+          poetry config repositories.owkin https://pypi.owkin.com/simple/
+          poetry config http-basic.owkin "${{ secrets.PYPI_USERNAME }}" "${{ secrets.PYPI_PASSWORD }}"
+
+      - name: Install dependencies
+        run: poetry install --all-extras --with=testing
+
+      - name: Testing
+        run: poetry run make test
+
+  linting:
+    runs-on: ubuntu-latest
+    name: Test Linting
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install Poetry
+        run: make install-poetry
+
+      - name: Pypi authentication
+        run: |
+          poetry config repositories.owkin https://pypi.owkin.com/simple/
+          poetry config http-basic.owkin "${{ secrets.PYPI_USERNAME }}" "${{ secrets.PYPI_PASSWORD }}"
+
+      - name: Install dependencies
+        run: poetry install --all-extras --with=linting,docs
+
+      - name: Test pre-commit checks
+        run: poetry run make pre-commit-checks
+
+      - name: Test linting
+        run: poetry run make lint
+
+      - name: Test typing
+        run: poetry run make typing
+
+      - name: Test docs
+        run: poetry run make test-docs

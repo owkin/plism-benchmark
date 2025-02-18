@@ -1,0 +1,29 @@
+name: Publish
+on:
+  release:
+    types: [published]
+jobs:
+  publish-on-pypi-servers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo and submodule
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install Poetry
+        run: make install-poetry
+
+      - name: Pypi authentication
+        run: |
+          poetry config repositories.owkin https://pypi.owkin.com/simple/
+          poetry config http-basic.owkin "${{ secrets.PYPI_USERNAME }}" "${{ secrets.PYPI_PASSWORD }}"
+
+      - name: Install dependencies
+        run: poetry install --all-extras
+
+      - name: Publish package
+        run: poetry publish -r owkin --build

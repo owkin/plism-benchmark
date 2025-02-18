@@ -1,0 +1,153 @@
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "owkin-plismbench"
+version = "0.0.0"
+description = "Repository hosting PLISM robustness benchmark"
+authors = ["Alexandre Filiot <alexandre.filiot@owkin.com>"]
+
+readme = "README.md"
+homepage = "https://github.com/owkin/plism-benchmark"
+repository = "https://github.com/owkin/plism-benchmark"
+documentation = "https://owkin.github.io/plism-benchmark"
+packages = [{ include = "plismbench" }]
+
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Natural Language :: English",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "owkin"
+url = "https://pypi.owkin.com/simple/"
+priority = "supplemental"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+torch = "^2.6.0"
+torchvision = "^0.21.0"
+transformers = "^4.49.0"
+datasets = "^3.3.1"
+loguru = "^0.7.3"
+timm = "^1.0.14"
+pre-commit = "^4.1.0"
+
+[tool.poetry.group.dev]
+optional = true
+[tool.poetry.group.dev.dependencies]
+nbconvert = "*"
+notebook = "*"
+
+[tool.poetry.group.docs]
+optional = true
+[tool.poetry.group.docs.dependencies]
+sphinx = "^7.0.0"
+sphinx-gallery = "*"
+Jinja2 = "*"
+doc8 = "*"
+recommonmark = "*"
+m2r = "*"
+mistune = "*"
+nbsphinx = "*"
+pandoc = "*"
+docutils = "*"
+pydocstyle = "*"
+sphinxcontrib-fulltoc = "*"
+sphinxcontrib-mockautodoc = "*"
+sphinx-autodoc-typehints = "*"
+sphinx-paramlinks = "*"
+pydata_sphinx_theme = "*"
+sphinxcontrib-mermaid = "*"
+watchdog = "^2.1.8"
+sphinx-tabs = "^3.4.1"
+
+[tool.poetry.group.linting]
+optional = true
+[tool.poetry.group.linting.dependencies]
+mypy = ">=1.4"
+pre-commit = ">=2.20.0"
+ruff = ">=0.1.2"
+pandas-stubs = "*"
+types-docutils = "*"
+types-python-dateutil = "*"
+types-setuptools = "*"
+types-Jinja2 = "*"
+types-MarkupSafe = "*"
+types-PyYAML = "*"
+typing_extensions = "*"
+
+[tool.poetry.group.testing]
+optional = true
+[tool.poetry.group.testing.dependencies]
+pytest = "*"
+coverage = "*"
+pytest-cov = "*"
+pytest-sphinx = "*"
+pytest-runner = "*"
+pytest-profiling = "*"
+
+[tool.ruff]
+exclude = [
+  ".git",
+  ".github",
+  ".dvc",
+  "__pycache__",
+  ".venv",
+  ".mypy_cache",
+   ".ruff_cache",
+  ".pytest_cache",
+  "conf.py",
+]
+lint.ignore = [
+  "B008",  # do not perform function calls in argument defaults
+  "C901",  # too complex
+  "D105",  # undocumented magic method
+  "E501",  # line too long, handled by black
+  "E731",  # lambda-assignment
+  "PLR0904", # too many public methods
+  "PLR0913", # too many arguments
+  "PLR2004", # magic value comparison
+  "B019", # use of cache methods
+  "B009", # getattr with constant value
+  "N812", # lowercase imported as non constant
+  "PLW2901", # loop variable overwritten by assignment
+  "PT011", # broad pytest errors
+]
+lint.select = [
+  "D",   # pydocstyle
+  "E",   # pycodestyle errors
+  "W",   # pycodestyle warnings
+  "F",   # pyflakes
+  "I",   # isort
+  "N",   # pep8-naming conventions
+  "C",   # flake8-comprehensions
+  "B",   # flake8-bugbear
+  "PL",  # pylint
+  "PT",  # flake8-pytest-style
+  "C90", # mccabe included in flake8
+  "ASYNC", # flake8-async
+]
+line-length = 88  # Must be consistent with black parameter
+target-version = "py39"  # Must be aligned with the Python lower bound
+
+[tool.ruff.lint.isort]
+known-first-party = ["plismbench"]
+lines-after-imports = 2
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]

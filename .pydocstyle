@@ -1,0 +1,4 @@
+[pydocstyle]
+convention = numpy
+match = (?!_).*\.py
+add_ignore = D105

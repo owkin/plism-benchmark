@@ -1,0 +1,59 @@
+repos:
+  - repo: https://github.com/sirosen/check-jsonschema
+    rev: 0.27.0
+    hooks:
+      - id: check-github-actions
+      - id: check-github-workflows
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        name: Trim trailing whitespace
+      - id: end-of-file-fixer
+        name: Fix end of files
+        exclude: \.ipynb$
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.3
+    hooks:
+      - id: prettier
+        name: Format yaml files using `prettier`
+        files: \.(yaml|yml)$
+  - repo: https://github.com/python-poetry/poetry
+    rev: 1.6.0
+    hooks:
+      - id: poetry-check
+        name: Run poetry check to validate configuration
+  - repo: local
+    hooks:
+      # Linter
+      - id: ruff-linter
+        name: Lint with `ruff`
+        language: system
+        types: [python]
+        require_serial: true
+        entry: poetry run ruff check
+        args: [--fix]
+        files: ^(plismbench|tests)/
+      # Formatter
+      - id: ruff-format
+        name: Format with `ruff`
+        language: system
+        types: [python]
+        require_serial: true
+        entry: poetry run ruff format
+        files: ^(plismbench|tests)/
+      # Type checker
+      - id: mypy
+        name: Test typing with `mypy`
+        language: system
+        types: [python]
+        require_serial: true
+        entry: poetry run mypy
+        files: ^plismbench/
+      # Jupyter notebook formatter
+      - id: jupyter-nb-clear-output
+        name: Clear Jupyter notebook outputs
+        files: \.ipynb$
+        language: system
+        entry: poetry run jupyter nbconvert
+        args: [--ClearOutputPreprocessor.enabled=True, --inplace]
