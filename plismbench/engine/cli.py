@@ -39,8 +39,10 @@ def extract(
 ):
     """Perform features extraction on PLISM histology tiles dataset streamed from Hugging-Face.
 
-    Example:
-    >>> plismbench extract --extractor h0_mini --batch-size 32 --export-dir $HOME/tmp/
+    .. code-block:: console
+
+        $ plismbench extract --extractor h0_mini --batch-size 32 --export-dir $HOME/tmp/
+
     """
     if extractor not in FeatureExtractorsEnum.choices():
         raise NotImplementedError(f"Extractor {extractor} not supported.")

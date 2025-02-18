@@ -24,6 +24,13 @@ jobs:
       - name: Install Poetry
         run: make install-poetry
 
+      - name: Install Hugging Face CLI
+        run: pip install huggingface_hub
+
+      - name: Log in to Hugging Face
+        run: |
+          python -c "from huggingface_hub import login; login(token='${{ secrets.HF_TOKEN }}', new_session=False)"
+
       - name: Install dependencies
         run: poetry install --all-extras --with=testing
 

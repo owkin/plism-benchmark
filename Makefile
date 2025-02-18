@@ -36,7 +36,7 @@ endif
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-config: ## configure poetry
+config: ## Configure poetry
 	poetry config virtualenvs.in-project true
 
 lock: ## Generate a new poetry.lock file (To be done after adding new requirements to pyproject.toml)
