@@ -43,6 +43,14 @@ class Extractor(ABC):
         """
         Transform method to apply element wise. Inputs should be np.ndarray.
 
+        This function is applied on ``np.ndarray`` and not ``PIL.Image.Image``
+        as HuggingFace data is stored as numpy arrays for pickle checking purposes.
+        If your model needs image resizing, then you will need to add a first
+        ``transforms.ToPILImage()`` operation, then resizing and finally
+        ``transforms.ToTensor()``.
+        If your model is best working on images of shape 224x224, then no need
+        for rescaling as PLISM tiles have 224x224 shapes.
+
         Default is identity.
 
         Returns

@@ -23,7 +23,7 @@ def test_owkin_cpu(
     """Owkin models test on CPU."""
     owkin_model = extractor(device=-1)
 
-    x = np.random.rand(448, 448, 3) * 255
+    x = np.random.rand(224, 224, 3) * 255  # H0Mini works on 224x224 images
     x = Image.fromarray(x.astype("uint8")).convert("RGB")
 
     transformed_x = owkin_model.transform(x)
@@ -49,7 +49,7 @@ def test_owkin_gpu(
     expected_output_dim: int,
 ) -> None:
     """Owkin models test on GPU."""
-    x = torch.randn((1, 3, 224, 224))
+    x = torch.randn((1, 3, 224, 224))  # H0Mini works on 224x224 images
 
     owkin_model = extractor(device=0)
 

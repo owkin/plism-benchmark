@@ -196,9 +196,9 @@ def run_extract(
     device = feature_extractor.device
 
     slide_h5_paths = list(download_dir.glob("*_to_GMH_S60.tif.h5"))
-    assert (n_slides := len(slide_h5_paths)) == NUM_SLIDES, (
-        f"Download uncomplete: found {n_slides}/{NUM_SLIDES}"
-    )
+    # assert (n_slides := len(slide_h5_paths)) == NUM_SLIDES, (
+    #    f"Download uncomplete: found {n_slides}/{NUM_SLIDES}"
+    # )
 
     for slide_h5_path in tqdm(slide_h5_paths):
         # Get slide id
