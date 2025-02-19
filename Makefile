@@ -42,13 +42,16 @@ config: ## Configure poetry
 lock: ## Generate a new poetry.lock file (To be done after adding new requirements to pyproject.toml)
 	poetry lock
 
+install-cupy: ## Install GPU accelerated numpy
+	conda install -c conda-forge cupy
+
 install-poetry: ## Install poetry package
-	curl -sSL https://install.python-poetry.org | python3 -
+	pip install poetry
 
 install: clean ## Install all package and development dependencies for testing to the active Python's site-packages
 	poetry install --all-extras --with=testing,linting,docs,dev
 
-install-all: install-poetry install ## Install poetry along with all package and development dependencies
+install-all: install-poetry install install-cupy ## Install poetry along with all package and development dependencies
 
 clean: clean-build clean-pyc clean-test clean-docs ## Remove all build, test, coverage and Python artifacts
 
