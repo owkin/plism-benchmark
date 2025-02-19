@@ -35,7 +35,7 @@ def format_results(results: pd.DataFrame) -> dict[str, str]:
     median_iqr = _median_iqr.to_dict()
     output = {}
     for key in mean_std.keys():
-        output[key] = mean_std[key] + " | " + median_iqr[key]
+        output[key] = mean_std[key] + " ; " + median_iqr[key]
     return output
 
 

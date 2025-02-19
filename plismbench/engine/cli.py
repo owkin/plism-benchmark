@@ -89,12 +89,13 @@ def download(
             help="Folder containing the .h5 files downloaded from Hugging Face.",
         ),
     ],
+    hf_token: Annotated[str, typer.Option("--token", help="Hugging Face token.")],
     workers: Annotated[
         int, typer.Option("--workers", help="Number of workers for parallel download.")
     ] = 8,
 ):
     """Download PLISM dataset from Hugging Face."""
-    login(new_session=False)
+    login(token=hf_token, new_session=False)
     _ = snapshot_download(
         repo_id="owkin/plism-dataset",
         repo_type="dataset",

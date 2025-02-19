@@ -318,5 +318,5 @@ def compute_metrics(
     robustness_results.to_csv(results_export_path, index=True)  # type: ignore
     # Only display median (IQR)
     logger.info("Robustness results [median (iqr)]:")
-    rprint(robustness_results.map(lambda x: x.split(" | ")[1]))
+    rprint(robustness_results.map(lambda x: x.split(" ; ")[1]))
     logger.success("Successfully computed and stored metrics.")
