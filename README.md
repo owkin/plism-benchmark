@@ -1,7 +1,12 @@
 <div align="center">
-<h1>PLIM robustness benchmark hosted by Owkin</h1>
 
-[![Python dev](https://github.com/owkin/plism-benchmark/actions/workflows/python-app.yml/badge.svg)](https://github.com/owkin/plism-benchmark/actions/workflows/python-app.yml) [![Deploy doc](https://github.com/owkin/plism-benchmark/actions/workflows/page.yml/badge.svg)](https://github.com/owkin/plism-benchmark/actions/workflows/page.yml)
+![header](https://capsule-render.vercel.app/api?type=waving&height=140&color=gradient&text=Plismbench:&section=header&fontAlign=16&fontSize=45&textBg=false&descAlignY=45&fontAlignY=20&descSize=20&desc=A%20%20robustness%20%20benchmark%20%20of%20%20pathology%20%20foundation%20A%20models&descAlign=52)
+
+
+
+[![Python dev](https://github.com/owkin/plism-benchmark/actions/workflows/python-app.yml/badge.svg)](https://github.com/owkin/plism-benchmark/actions/workflows/python-app.yml) [![Deploy doc](https://github.com/owkin/plism-benchmark/actions/workflows/page.yml/badge.svg)](https://github.com/owkin/plism-benchmark/actions/workflows/page.yml) [![Arxiv](https://img.shields.io/badge/Arxiv-2407.18449-red?style=flat-square)](https://arxiv.org/abs/2501.16239)
+![GitHub last commit](https://img.shields.io/github/last-commit/owkin/plism-benchmark?style=flat-square)
+[![Hugging face](https://img.shields.io/badge/%F0%9F%A4%97%20%20-PLISM-yellow)](https://huggingface.co/datasets/owkin/plism-dataset)
 </div>
 
 
@@ -18,6 +23,14 @@ You can find a detailed description of each subcommand by typing:
 ```bash
 plismbench --help
 ```
+
+## Hardware requirements
+
+This benchmark can be executed on cpu or gpu. We strongly advise to run it on gpu to benefit from `cupy` acceleration on graphical cards. From downloading to computing the results, running the benchmark takes approximately on our workstation (**32 CPUs, 1 Nvidia T4 (16Go) and 120Gb RAM**):
+
+- 2h45 for a ViT-B: 15 minutes for download, 1h30 for features extraction, 1h for robustness metrics computation.
+- 4h45 for a ViT-g: 15 minutes for download, 3h for features extraction, 1h30 for robustness metrics computation.
+
 
 ### Download
 
@@ -156,5 +169,6 @@ If you are using this dataset, please cite the original article (Ochi et al., 20
 
 ## TODO
 - [] Remove tiles sorting
+- [] Better comment core_compute_metrics
 - [] Add tests for cli commands
 - [] Add visualization scripts with different extractors
