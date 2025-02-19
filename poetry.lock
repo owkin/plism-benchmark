@@ -4034,6 +4034,17 @@ files = [
 ]
 
 [[package]]
+name = "rprint"
+version = "0.0.8"
+description = "Class to remote debug with UDP connection"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "rprint-0.0.8-py2.py3-none-any.whl", hash = "sha256:e444de03ef32f0cd093ea160e1999ec72207b08046a5695db6477051a816e912"},
+]
+
+[[package]]
 name = "ruff"
 version = "0.9.6"
 description = "An extremely fast Python linter and code formatter, written in Rust."
@@ -5442,4 +5453,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<4.0"
-content-hash = "4171847d2b533e8b7057421efa96875fdf918132ceaafaf7972a37545d4c35a7"
+content-hash = "a56a288de7b3d2449da1964d054f05da7930c83c0a6f9a111f2e7e3edeb00ba8"

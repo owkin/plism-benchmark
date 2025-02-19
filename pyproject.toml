@@ -46,6 +46,7 @@ pre-commit = "^4.1.0"
 typer = "^0.15.1"
 h5py = "^3.12.1"
 p-tqdm = "^1.4.2"
+rprint = "^0.0.8"
 
 [tool.poetry.group.dev]
 optional = true
