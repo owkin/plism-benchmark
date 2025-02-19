@@ -1,11 +1,10 @@
 <div align="center">
 
-![header](https://capsule-render.vercel.app/api?type=waving&height=140&color=0:56b4e9,50:009e73,100:cc79a7&text=Plismbench:&section=header&fontAlign=16&fontSize=45&textBg=false&descAlignY=45&fontAlignY=20&descSize=20&desc=A%20%20robustness%20%20benchmark%20%20of%20%20pathology%20%20foundation%20A%20models&descAlign=52)
+![header](https://capsule-render.vercel.app/api?type=waving&height=140&color=0:56b4e9,50:009e73,100:cc79a7&text=Plismbench:&section=header&fontAlign=16&fontSize=45&textBg=false&descAlignY=45&fontAlignY=20&descSize=20&desc=A%20%20robustness%20%20benchmark%20%20of%20%20pathology%20%20foundation%20%20models&descAlign=52)
 
 
 
 [![Python dev](https://github.com/owkin/plism-benchmark/actions/workflows/python-app.yml/badge.svg)](https://github.com/owkin/plism-benchmark/actions/workflows/python-app.yml) [![Deploy doc](https://github.com/owkin/plism-benchmark/actions/workflows/page.yml/badge.svg)](https://github.com/owkin/plism-benchmark/actions/workflows/page.yml) [![Arxiv](https://img.shields.io/badge/Arxiv-2407.18449-red?style=flat-square)](https://arxiv.org/abs/2501.16239)
-![GitHub last commit](https://img.shields.io/github/last-commit/owkin/plism-benchmark?style=flat-square)
 [![Hugging face](https://img.shields.io/badge/%F0%9F%A4%97%20%20-PLISM-yellow)](https://huggingface.co/datasets/owkin/plism-dataset)
 </div>
 
@@ -40,7 +39,7 @@ First you will need to download [PLISM dataset](https://huggingface.co/datasets/
 plismbench download --download-dir /your/download/dir --token your_hf_token --workers 8
 ```
 
-> [NOTE!]
+> [!NOTE]
 > 225 Go are required to store 91 WSI-level .h5 files, download approximately takes 10 minutes (32 workers)
 >
 
@@ -63,11 +62,11 @@ plismbench extract \
     --workers 8
 ```
 
-> [NOTE!]
+> [!NOTE]
 > 10 Gb storage and 1h30 are necessary to extract all features with a ViT-B model, 16 CPUs and 1 Nvidia T4 (16Go).
 >
 
-> [IMPORTANT!]
+> [!IMPORTANT]
 > Tests will be run on CI/CD, which implies that private models hosted on Hugging Face will break it:
 > ```yaml
 >     - name: Log in to Hugging Face
@@ -86,7 +85,7 @@ plismbench evaluate \
     --metrics-dir /your/metrics/export/dir/
 ```
 
-> [NOTE!]
+> [!NOTE]
 > 1h is necessary to compute metrics for a ViT-B model, 16 CPUs and 1 Nvidia T4 (16Go).
 >
 
@@ -99,7 +98,7 @@ The `evaluate` command can run on two different types of device:
 - `--device="gpu"` (uses `cupy`): in that case, no need to specify the number of workers. Matrix operations are done on the gpu directly in a sequential manner over all possible slide pairs. **Depending on your GPU RAM, you may encounter cuda memory errors**. We advise to switch to CPU in that case. As an example, we manage to run `evaluate` on GPU (1 T4 16 Go) with Virchow2 concatenated features (d=2563) and `n_tiles=8139` (1 hour).
 
 
-> [IMPORTANT!]
+> [!IMPORTANT]
 > The `evaluate` command will compute metrics for each slide-pair (individual pickles and a final .csv with 1 row per pair) and metrics aggregated over pairs (.csv file). Metrics are cosine similarity and top-k accuracies (with k=[1, 3, 5, 10]) by default. We compute mean (std) and median (iqr) over all possible slides pairs, inter-scanners pairs, inter-stainings pairs and inter-scanners + inter-staining pairs.
 >
 > The number of tiles can be set to either 460 (debugging purposes), 2713 (1/6th of the total number of tiles per slide which is 16278), 5426 (1/3rd), 8139 (half) or 16278 (total number of tiles). **If `None`, the default number of tiles will be 8139 which is the reference for our benchmark.**
@@ -127,7 +126,7 @@ results = get_results(pd.read_csv("metrics.csv"), top_k=[1, 3, 5, 10]).
 
 Please refer to our [documentation](https://owkin.github.io/plism-benchmark) to follow our contribution guidelines.
 
-> [IMPORTANT!]
+> [!IMPORTANT]
 > Please report the output of `results.csv` in your PR description as illustrated above, along with the number of tiles used to compute the metrics.
 >
 
