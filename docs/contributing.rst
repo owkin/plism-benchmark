@@ -49,7 +49,7 @@ To install all required dependencies, you can run the following command:
 
 .. code-block:: console
 
-    $ make install
+    $ make install-all
 
 .. _Github repository: https://github.com/owkin/plism-benchmark
 .. _poetry: https://python-poetry.org/docs/
@@ -71,8 +71,6 @@ from the root of the ``plism-benchmark`` repository. Now all of
 the styling checks will be run each time you commit changes without your
 needing to run each one manually. In addition, using ``pre-commit`` will also
 allow you to more easily remain up-to-date with code checks as they evolve.
-
-Note that if needed, you can skip these checks with ``git commit --no-verify``.
 
 If you don’t want to use ``pre-commit`` as part of your workflow, you can
 still use it to run its checks with:
