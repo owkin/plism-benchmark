@@ -132,7 +132,7 @@ Please refer to our [documentation](https://owkin.github.io/plism-benchmark) to 
 
 ## License
 
-This dataset is licensed under [CC BY 4.0 licence](https://creativecommons.org/licenses/by/4.0/deed.en).
+This repository is licensed under [CC BY 4.0 licence](https://creativecommons.org/licenses/by/4.0/deed.en).
 
 ## Acknowledgments
 
