@@ -71,6 +71,8 @@ def show_aggregate_results(
     top_k: list[int] | None = None,
 ):
     """Retrieve results from .csv and rank by a given metric."""
+    if top_k is None:
+        top_k = [1, 3, 5, 10]
     supported_metric_names = ["cosine_similarity"] + [
         f"top_{k}_accuracy" for k in top_k
     ]
@@ -93,8 +95,6 @@ def show_aggregate_results(
         raise ValueError(
             f"{robustness_type} robustness type not supported. Supported: {supported_robustness_types}."
         )
-    if top_k is None:
-        top_k = [1, 3, 5, 10]
     results = format_results(
         metrics_root_dir, n_tiles=n_tiles, agg_type=agg_type, top_k=top_k
     )

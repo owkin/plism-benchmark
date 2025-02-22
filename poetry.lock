@@ -4862,14 +4862,14 @@ typing = ["mypy (>=1.6,<2.0)", "traitlets (>=5.11.1)"]
 
 [[package]]
 name = "timm"
-version = "1.0.14"
+version = "1.0.12"
 description = "PyTorch Image Models"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "timm-1.0.14-py3-none-any.whl", hash = "sha256:16653695ff420cf4e87e384c8654f2ee6be2070bcb4a0e840b5c6764ee0547ec"},
-    {file = "timm-1.0.14.tar.gz", hash = "sha256:00a7f2cc04ce3ed8f80476bbb7eea27eac8cf6f2d59b5e9aa9cdd375dd6550db"},
+    {file = "timm-1.0.12-py3-none-any.whl", hash = "sha256:6b2770674213f10b7f193be5598ce48bd010ab21cc8af77dba6aeef58b1298a1"},
+    {file = "timm-1.0.12.tar.gz", hash = "sha256:9da490683bd06302ec40e1892f1ccf87985f033e41f3580887d886b9aee9449a"},
 ]
 
 [package.dependencies]
@@ -5514,6 +5514,29 @@ files = [
 dev = ["black (>=19.3b0) ; python_version >= \"3.6\"", "pytest (>=4.6.2)"]
 
 [[package]]
+name = "xformers"
+version = "0.0.29.post3"
+description = "XFormers: A collection of composable Transformer building blocks."
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "xformers-0.0.29.post3-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:59c64379c015f36eb69947f1ee559a0ac8742159ef3d9b8e5a6d1519806d2101"},
+    {file = "xformers-0.0.29.post3-cp310-cp310-win_amd64.whl", hash = "sha256:34f13d69ad9404e44ae11169e99842c3fccdc2c75b1fc4831a70c78392d990db"},
+    {file = "xformers-0.0.29.post3-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:bbf2f500dfdbcf4649bf568cc2c9f434399f704dc4064fd1fbdbef2b524a8139"},
+    {file = "xformers-0.0.29.post3-cp311-cp311-win_amd64.whl", hash = "sha256:00f2dfd94c894ff6372e21bee3f09e96bce75b55649df366649c43f049eb7a1e"},
+    {file = "xformers-0.0.29.post3-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:08fa92f3e06372c4ce2a5306c54ae3d4a3a399fc7e24e02aac3761112ec3aeed"},
+    {file = "xformers-0.0.29.post3-cp312-cp312-win_amd64.whl", hash = "sha256:3706eca371767ff9709595185910d809fc817ec3cf4234ef44d70d2b8844d7e2"},
+    {file = "xformers-0.0.29.post3-cp39-cp39-manylinux_2_28_x86_64.whl", hash = "sha256:9ce9b96fbb3032be21e038e37b4bd6508e191c38561e99698204abd4acd1fa98"},
+    {file = "xformers-0.0.29.post3-cp39-cp39-win_amd64.whl", hash = "sha256:14cb310fa78fdbe68772ce55e624b6a75d5766b2450030da49baa61112b801f1"},
+    {file = "xformers-0.0.29.post3.tar.gz", hash = "sha256:0b77c67ecc3c9fdd8a0e4399e675adf12e2ff40285e00974cca2d09108157f60"},
+]
+
+[package.dependencies]
+numpy = "*"
+torch = "2.6.0"
+
+[[package]]
 name = "xxhash"
 version = "3.5.0"
 description = "Python binding for xxHash"
@@ -5746,4 +5769,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4.0"
-content-hash = "c59ae6b4424f6978a88b50c59be783f0e6ac4e04058b18bd6a5825a8f0bf5134"
+content-hash = "e16ac6f660bda5346dc0720cf00d176cb651d65e8c3221f29cb45aa5374d9a67"
