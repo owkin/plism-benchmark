@@ -14,6 +14,14 @@
 The documentation can be found [here](https://owkin.github.io/plism-benchmark).
 Please refer to the Installation section to install this repository.
 
+## Benchmark
+
+Our robustness benchmark is based on two different metrics: top-10 accuracy and cosine similarity. These metrics are computed over 4,095 unique slide pairs. Through our evaluation pipeline, robustness metrics are computed for all pairs but also cross-scanner (fixed staining), cross-staining (fixed scanner) or cross-scanner and cross-staining. Details are available in the `results.csv` file generated as the end of the evaluation.
+
+We plan to udpate this benchmark regularly with the latest extractors. Feel free to submit a PR sharing your results with your own feature extractor (see contribution guidelines).
+
+<img src="./assets/figure.png">
+
 ## Run PLISM benchmark with your model
 
 The following commands can be run through the cli command `plismbench`.
@@ -155,3 +163,4 @@ _to be completed_
 
 ## TODO
 - [] Add more tests
+- [] Add benchmark
