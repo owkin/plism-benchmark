@@ -94,10 +94,10 @@ def download(
         int, typer.Option("--workers", help="Number of workers for parallel download.")
     ] = 8,
 ):
-    """Download PLISM dataset from Hugging Face."""
+    """Download PLISM dataset."""
     login(token=hf_token, new_session=False)
     _ = snapshot_download(
-        repo_id="owkin/plism-dataset",
+        repo_id="XXXX",
         repo_type="dataset",
         local_dir=download_dir,
         allow_patterns=["*_to_GMH_S60.tif.h5"],

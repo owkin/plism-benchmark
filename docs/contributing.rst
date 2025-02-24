@@ -18,7 +18,7 @@ You can clone the repository:
 
 .. code-block:: console
 
-    $ git clone git@github.com:owkin/plism-benchmark.git
+    $ git clone git@github.com:XXXX/plism-benchmark.git
 
 Once you have a copy of the source code, we recommend installing the latest version of
 `poetry`_:
@@ -51,7 +51,7 @@ To install all required dependencies, you can run the following command:
 
     $ make install-all
 
-.. _Github repository: https://github.com/owkin/plism-benchmark
+.. _Github repository: https://github.com/XXXX/plism-benchmark
 .. _poetry: https://python-poetry.org/docs/
 
 

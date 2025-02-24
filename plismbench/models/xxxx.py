@@ -1,4 +1,4 @@
-"""Models from Bioptimus company."""
+"""Models from XXXX company."""
 
 from __future__ import annotations
 
@@ -15,10 +15,7 @@ from plismbench.models.utils import DEFAULT_DEVICE, SwiGLUFFNFused, prepare_modu
 
 
 class H0Mini(Extractor):
-    """H0-mini model available on Hugging-Face (1).
-
-    .. note::
-        (1) https://huggingface.co/owkin/H0-mini
+    """H0-mini model.
 
     Parameters
     ----------
@@ -51,7 +48,7 @@ class H0Mini(Extractor):
                 "act_layer": torch.nn.SiLU,
             }
             feature_extractor = timm.create_model(
-                "hf-hub:bioptimus/H0-mini", pretrained=True, **timm_kwargs
+                "hf-hub:XXXX", pretrained=True, **timm_kwargs
             )
         else:
             # THe default behavior to ensure anonymity.

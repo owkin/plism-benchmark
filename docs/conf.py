@@ -58,12 +58,12 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # package distribution
-package_distribution = pkg_resources.get_distribution('owkin-plismbench')
+package_distribution = pkg_resources.get_distribution('plismbench')
 
 # General information about the project.
 project = 'PLISM robustness benchmark'
-copyright = f'{datetime.date.today().year}, Owkin Inc.'
-author = 'Owkin Inc.'
+copyright = f'{datetime.date.today().year}, XXXX.'
+author = 'XXXX'
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -139,7 +139,7 @@ latex_elements: dict = {
 # (source start file, target name, title, author, documentclass
 # [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'plismbench.tex', project, 'Owkin Inc.', 'manual'),
+    (master_doc, 'plismbench.tex', project, 'XXXX', 'manual'),
 ]
 
 # -- Options for manual page output ------------------------------------
@@ -169,7 +169,7 @@ texinfo_documents = [
 
 html_static_path = ["_static"]
 html_theme_options = {
-    "github_url": "https://github.com/owkin/plism-benchmark",
+    "github_url": "https://github.com/XXXX/plism-benchmark", # this will break the documentation
     "show_prev_next": False,
    "logo": {
       "image_light": "logo-light.png",

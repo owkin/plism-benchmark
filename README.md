@@ -2,16 +2,12 @@
 
 ![header](https://capsule-render.vercel.app/api?type=waving&height=140&color=0:56b4e9,50:009e73,100:cc79a7&text=Plismbench:&section=header&fontAlign=16&fontSize=45&textBg=false&descAlignY=45&fontAlignY=20&descSize=20&desc=A%20%20robustness%20%20benchmark%20%20of%20%20pathology%20%20foundation%20%20models&descAlign=52)
 
-
-
-[![Python dev](https://github.com/owkin/plism-benchmark/actions/workflows/python-app.yml/badge.svg)](https://github.com/owkin/plism-benchmark/actions/workflows/python-app.yml) [![Deploy doc](https://github.com/owkin/plism-benchmark/actions/workflows/page.yml/badge.svg)](https://github.com/owkin/plism-benchmark/actions/workflows/page.yml) [![Arxiv](https://img.shields.io/badge/Arxiv-2407.18449-red?style=flat-square)](https://arxiv.org/abs/2501.16239)
-[![Hugging face](https://img.shields.io/badge/%F0%9F%A4%97%20%20-PLISM-yellow)](https://huggingface.co/datasets/owkin/plism-dataset)
 </div>
 
 
 ## Documentation
 
-The documentation can be found [here](https://owkin.github.io/plism-benchmark).
+The documentation can be found at XXXX.
 Please refer to the Installation section to install this repository.
 
 ## Benchmark
@@ -41,7 +37,7 @@ This benchmark can be executed on cpu or gpu. We strongly advise to run it on gp
 
 ### Download
 
-First you will need to download [PLISM dataset](https://huggingface.co/datasets/owkin/plism-dataset) hosted on Hugging Face using the following command:
+First you will need to download PLISM dataset hosted on at XXXX using the following command:
 
 ```bash
 plismbench download --download-dir /your/download/dir --token your_hf_token --workers 8
@@ -133,7 +129,7 @@ results = get_results(pd.read_csv("metrics.csv"), top_k=[1, 3, 5, 10]).
 
 ## Contribute
 
-Please refer to our [documentation](https://owkin.github.io/plism-benchmark) to follow our contribution guidelines.
+Please refer to our documentation at XXXX to follow our contribution guidelines.
 
 > [!IMPORTANT]
 > Please report the output of `results.csv` in your PR description as illustrated above, along with the number of tiles used to compute the metrics.

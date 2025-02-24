@@ -3,15 +3,12 @@ requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "owkin-plismbench"
+name = "plismbench"
 version = "0.0.0"
 description = "Repository hosting PLISM robustness benchmark"
-authors = ["Alexandre Filiot <alexandre.filiot@owkin.com>"]
+authors = ["XXXX <XXXX@XXXX.XXXX>"]
 
 readme = "README.md"
-homepage = "https://github.com/owkin/plism-benchmark"
-repository = "https://github.com/owkin/plism-benchmark"
-documentation = "https://owkin.github.io/plism-benchmark"
 packages = [{ include = "plismbench" }]
 
 classifiers = [

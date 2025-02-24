@@ -23,8 +23,8 @@ n_tiles=(
 )
 
 # Set features and metrics directories
-features_dir=/home/owkin/project/plism_features/
-metrics_dir=/home/owkin/project/plism_metrics/
+features_dir=/home/user/project/plism_features/
+metrics_dir=/home/user/project/plism_metrics/
 
 # Iterate over number of tiles
 for _n_tiles in ${n_tiles[*]}
