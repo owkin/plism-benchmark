@@ -75,12 +75,13 @@ plismbench extract \
 >
 
 > [!IMPORTANT]
-> Tests will be run on CI/CD, which implies that private models hosted on Hugging Face will break it:
+> If your model aims to be integrated into `plismbench`, prior tests will be conducted on CI/CD which requires a login step to Hugging Face. This step will call `secrets.HF_TOKEN`, i.e. the HF token of the CODEOWNER of this repository.
+
 > ```yaml
 >     - name: Log in to Hugging Face
 >        run: python -c "from huggingface_hub import login; login(token='${{ secrets.HF_TOKEN }}', new_session=False)"
 >```
-> We only add public models to this repository.
+> Please make sure that 1) your model is public, 2) the CODEOWNER has access to it. For instance, if your model is publicly available on HF but under gated access, please check with the CODEOWNER to be granted access to it (you can ask it through your PR). **We only benchmark public models.**
 
 ### Compute metrics
 

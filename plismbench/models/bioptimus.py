@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+from importlib import resources
 from typing import Any
 
 import numpy as np
@@ -67,8 +67,9 @@ class H0Mini(Extractor):
                 "act_layer": torch.nn.SiLU,
             }
             feature_extractor = timm.create_model(**timm_kwargs)
+            plism_root_dir = resources.files("plismbench").parent  # type: ignore
             weights = torch.load(
-                Path(__file__).parent.parent.parent / "weights" / "h0_mini.pth",
+                plism_root_dir / "weights" / "h0_mini.pth",
                 weights_only=True,
                 map_location="cpu",
             )
