@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from enum import Enum
 
-from plismbench.models.owkin import H0Mini
+from plismbench.models.bioptimus import H0Mini
 
 
 class StringEnum(Enum):
