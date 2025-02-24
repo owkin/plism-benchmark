@@ -14,6 +14,14 @@
 The documentation can be found [here](https://owkin.github.io/plism-benchmark).
 Please refer to the Installation section to install this repository.
 
+## Benchmark
+
+Our robustness benchmark is based on two different metrics: top-10 accuracy and cosine similarity. These metrics are computed over 4,095 unique slide pairs. Through our evaluation pipeline, robustness metrics are computed for all pairs but also cross-scanner (fixed staining), cross-staining (fixed scanner) or cross-scanner and cross-staining. Details are available in the `results.csv` file generated as the end of the evaluation.
+
+We plan to udpate this benchmark regularly with the latest extractors. Feel free to submit a PR sharing your results with your own feature extractor (see contribution guidelines).
+
+<img src="./assets/figure.png">
+
 ## Run PLISM benchmark with your model
 
 The following commands can be run through the cli command `plismbench`.
@@ -67,12 +75,13 @@ plismbench extract \
 >
 
 > [!IMPORTANT]
-> Tests will be run on CI/CD, which implies that private models hosted on Hugging Face will break it:
+> If your model aims to be integrated into `plismbench`, prior tests will be conducted on CI/CD which requires a login step to Hugging Face. This step will call `secrets.HF_TOKEN`, i.e. the HF token of the CODEOWNER of this repository.
+
 > ```yaml
 >     - name: Log in to Hugging Face
 >        run: python -c "from huggingface_hub import login; login(token='${{ secrets.HF_TOKEN }}', new_session=False)"
 >```
-> We only add public models to this repository.
+> Please make sure that 1) your model is public, 2) the CODEOWNER has access to it. For instance, if your model is publicly available on HF but under gated access, please check with the CODEOWNER to be granted access to it (you can ask it through your PR). **We only benchmark public models.**
 
 ### Compute metrics
 
@@ -132,7 +141,7 @@ Please refer to our [documentation](https://owkin.github.io/plism-benchmark) to 
 
 ## License
 
-This dataset is licensed under [CC BY 4.0 licence](https://creativecommons.org/licenses/by/4.0/deed.en).
+This repository is licensed under [CC BY 4.0 licence](https://creativecommons.org/licenses/by/4.0/deed.en).
 
 ## Acknowledgments
 
@@ -146,28 +155,13 @@ We thank PLISM dataset's authors for their unique contribution.
 ## How to cite
 
 If you are using this dataset, please cite the original article (Ochi et al., 2024) and our work as follows:
-
-
-```
-@misc{filiot2025distillingfoundationmodelsrobust,
-      title         = {Distilling foundation models for robust and efficient models in digital pathology},
-      author        = {Alexandre Filiot and Nicolas Dop and Oussama Tchita and Auriane Riou and Thomas Peeters and Daria Valter and Marin Scalbert and Charlie Saillard and Geneviève Robin and Antoine Olivier},
-      year          = {2025},
-      eprint        = {2501.16239},
-      archivePrefix = {arXiv},
-      primaryClass  = {cs.CV},
-      url           = {https://arxiv.org/abs/2501.16239},
-}
-```
+_to be completed_
 
 ## References
 
 - (Ochi et al., 2024) Ochi, M., Komura, D., Onoyama, T. et al. Registered multi-device/staining histology image dataset for domain-agnostic machine learning models. Sci Data 11, 330 (2024).
 
-- (Filiot et al., 2025) Filiot, A., Dop, N., Tchita, O., Riou, A., Peeters, T., Valter, D., Scalbert, M., Saillard, C., Robin, G., & Olivier, A. (2025). Distilling foundation models for robust and efficient models in digital pathology. arXiv. https://arxiv.org/abs/2501.16239
 
 ## TODO
-- [] Remove tiles sorting
-- [] Better comment core_compute_metrics
-- [] Add tests for cli commands
-- [] Add visualization scripts with different extractors
+- [] Add more tests
+- [] Add benchmark

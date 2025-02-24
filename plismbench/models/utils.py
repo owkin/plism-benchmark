@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 import torch
+from xformers.ops import SwiGLU
 
 
 DEFAULT_DEVICE = (
@@ -92,3 +95,26 @@ def prepare_module(
     module.requires_grad_(False)
 
     return module, device_
+
+
+class SwiGLUFFNFused(SwiGLU):
+    """SwiGLUFFNFused layer as implemented in DINO v2 original code base."""
+
+    def __init__(
+        self,
+        in_features: int,
+        hidden_features: int | None = None,
+        out_features: int | None = None,
+        act_layer: Callable[..., torch.nn.Module] | None = None,
+        drop: float = 0.0,
+        bias: bool = True,
+    ) -> None:
+        out_features = out_features or in_features
+        hidden_features = hidden_features or in_features
+        hidden_features = (int(hidden_features * 2 / 3) + 7) // 8 * 8
+        super().__init__(
+            in_features=in_features,
+            hidden_features=hidden_features,
+            out_features=out_features,
+            bias=bias,
+        )

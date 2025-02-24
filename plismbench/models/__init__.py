@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from enum import Enum
 
-from plismbench.models.owkin import H0Mini
+from plismbench.models.bioptimus import H0Mini
 
 
 class StringEnum(Enum):
@@ -26,12 +26,13 @@ class FeatureExtractorsEnum(StringEnum):
     # this should map exactly the name in constants
     H0_MINI = "h0_mini"
 
-    def init(self, device: int | list[int] | None):
+    def init(self, device: int | list[int] | None, **kwargs):
         """Initialize the feature extractor."""
         if self is self.H0_MINI:
             feature_extractor = H0Mini(
                 device=device,
                 mixed_precision=True,  # don't change this value
+                **kwargs,
             )
         else:
             raise NotImplementedError(f"Extractor {self} is not supported.")
