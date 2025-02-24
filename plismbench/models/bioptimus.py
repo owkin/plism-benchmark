@@ -70,7 +70,7 @@ class H0Mini(Extractor):
             plism_root_dir = resources.files("plismbench").parent  # type: ignore
             weights = torch.load(
                 plism_root_dir / "weights" / "h0_mini.pth",
-                weights_only=False,
+                weights_only=True,
                 map_location="cpu",
             )
             feature_extractor.load_state_dict(weights, strict=True)
