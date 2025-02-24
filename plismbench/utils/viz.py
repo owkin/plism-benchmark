@@ -183,7 +183,8 @@ def display_plism_metrics(
             fontweight="bold",
         )
 
-    # Please leave these values as-is
+    # Please leave these values as-is: adding circles in the legend
+    # proportionnal to the model size.
     scatter_handles = [
         plt.scatter(
             [], [], s=50, edgecolor="black", color="gray", alpha=0.5, label="     22M"

@@ -32,7 +32,7 @@ def format_results(
     n_tiles: int = 8139,
     top_k: list[int] | None = None,
 ) -> pd.DataFrame:
-    """Store metrics according to an aggregation type ("mean" or "median")."""
+    """Add float columns with parsed metrics wrt an aggregation type ("mean" or "median")."""
     if top_k is None:
         top_k = [1, 3, 5, 10]
     metric_names = ["cosine_similarity"] + [f"top_{k}_accuracy" for k in top_k]
@@ -62,14 +62,13 @@ def rank_results(
     return output.sort_values(robustness_type, ascending=False)
 
 
-def show_aggregate_results(
-    metrics_root_dir: Path,
-    n_tiles: int = 8139,
+def show_aggregated_results(
+    results: pd.DataFrame,
     metric_name: str = "top_1_accuracy",
     robustness_type: str = "all",
     agg_type: str = "median",
     top_k: list[int] | None = None,
-):
+) -> pd.DataFrame:
     """Retrieve results from .csv and rank by a given metric."""
     if top_k is None:
         top_k = [1, 3, 5, 10]
@@ -95,9 +94,6 @@ def show_aggregate_results(
         raise ValueError(
             f"{robustness_type} robustness type not supported. Supported: {supported_robustness_types}."
         )
-    results = format_results(
-        metrics_root_dir, n_tiles=n_tiles, agg_type=agg_type, top_k=top_k
-    )
     ranked_results = rank_results(
         results,
         metric_name=f"{metric_name}_{agg_type}",

@@ -1,4 +1,4 @@
-"""Models from Owkin company."""
+"""Models from Bioptimus company."""
 
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ class H0Mini(Extractor):
         self,
         device: int | list[int] | None = DEFAULT_DEVICE,
         mixed_precision: bool = False,
-        load_from_huggingface: bool = True,
+        load_from_huggingface: bool = False,
     ):
         super().__init__()
         self.mixed_precision = mixed_precision
@@ -51,9 +51,10 @@ class H0Mini(Extractor):
                 "act_layer": torch.nn.SiLU,
             }
             feature_extractor = timm.create_model(
-                "hf-hub:owkin/H0-mini", pretrained=True, **timm_kwargs
+                "hf-hub:bioptimus/H0-mini", pretrained=True, **timm_kwargs
             )
         else:
+            # THe default behavior to ensure anonymity.
             timm_kwargs = {
                 "model_name": "vit_base_patch14_reg4_dinov2",
                 "img_size": 224,

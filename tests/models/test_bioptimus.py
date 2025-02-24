@@ -7,7 +7,7 @@ import pytest
 import torch
 from PIL import Image
 
-from plismbench.models.owkin import H0Mini
+from plismbench.models.bioptimus import H0Mini
 
 
 @pytest.mark.parametrize(

@@ -154,7 +154,4 @@ _to be completed_
 
 
 ## TODO
-- [] Remove tiles sorting
-- [] Better comment core_compute_metrics
-- [] Add tests for cli commands
-- [] Add visualization scripts with different extractors
+- [] Add more tests
