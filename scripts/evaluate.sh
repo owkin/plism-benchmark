@@ -1,4 +1,4 @@
-# List of feature extractors to test
+# List of feature extractors to compute metrics on
 extractors=(
     virchow2
     h0_mini

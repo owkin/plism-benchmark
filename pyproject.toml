@@ -44,7 +44,6 @@ p-tqdm = "^1.4.2"
 rprint = "^0.0.8"
 matplotlib = "^3.10.0"
 seaborn = "^0.13.2"
-xformers = "^0.0.29.post3"
 
 [tool.poetry.group.dev]
 optional = true
