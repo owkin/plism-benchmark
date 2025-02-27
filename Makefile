@@ -46,7 +46,7 @@ install-cupy: ## Install GPU accelerated numpy
 	conda install -c conda-forge cupy
 
 install-poetry: ## Install poetry package
-	pip install poetry
+	pip install poetry==1.7.1
 
 install: clean ## Install all package and development dependencies for testing to the active Python's site-packages
 	poetry install --all-extras --with=testing,linting,docs,dev
