@@ -16,13 +16,35 @@ Please refer to the Installation section to install this repository.
 
 ## Benchmark
 
+On 03/03/2025.
+
+| Extractor      |   Cosine similarity (all) |   Top-10 accuracy (cross-scanner) |   Top-10 accuracy (cross-staining) |   Top-10 accuracy (cross-scanner, cross-staining) |   Leaderboard metric | Rank   |
+|:---------------|--------------------------:|----------------------------------:|-----------------------------------:|--------------------------------------------------:|---------------------:|:-------|
+| H0-Mini        |                     0.800 |                             0.864 |                              0.318 |                                             0.183 |                0.541 | #1     |
+| CONCH          |                     0.846 |                             0.752 |                              0.241 |                                             0.155 |                0.498 | #2     |
+| H-Optimus-0    |                     0.685 |                             0.744 |                              0.327 |                                             0.166 |                0.480 | #3     |
+| Virchow2       |                     0.777 |                             0.609 |                              0.306 |                                             0.163 |                0.464 | #4     |
+| Prov-GigaPath  |                     0.570 |                             0.592 |                              0.118 |                                             0.054 |                0.333 | #5     |
+| UNI2-h         |                     0.591 |                             0.501 |                              0.190 |                                             0.046 |                0.332 | #6     |
+| Kaiko ViT-B/8  |                     0.764 |                             0.346 |                              0.147 |                                             0.045 |                0.325 | #7     |
+| UNI            |                     0.547 |                             0.532 |                              0.169 |                                             0.053 |                0.325 | #8     |
+| GPFM           |                     0.594 |                             0.356 |                              0.092 |                                             0.017 |                0.265 | #9     |
+| PLIP           |                     0.878 |                             0.054 |                              0.040 |                                             0.004 |                0.244 | #10    |
+| Phikon         |                     0.622 |                             0.125 |                              0.021 |                                             0.004 |                0.193 | #11    |
+| Kaiko ViT-L/14 |                     0.569 |                             0.115 |                              0.041 |                                             0.006 |                0.183 | #12    |
+| Phikon v2      |                     0.557 |                             0.064 |                              0.030 |                                             0.003 |                0.164 | #13    |
+| Hibou Large    |                     0.490 |                             0.061 |                              0.030 |                                             0.008 |                0.147 | #14    |                                       0.008 |                0.147 | #14    |
+
 Our robustness benchmark is based on two different metrics: top-10 accuracy and cosine similarity. These metrics are computed over 4,095 unique slide pairs. Through our evaluation pipeline, robustness metrics are computed for all pairs but also cross-scanner (fixed staining), cross-staining (fixed scanner) or cross-scanner and cross-staining. Details are available in the `results.csv` file generated as the end of the evaluation.
 
 We plan to udpate this benchmark regularly with the latest extractors. Feel free to submit a PR sharing your results with your own feature extractor (see contribution guidelines).
 
+> [!IMPORTANT]
+> The leaderboard metric is the average of 4 metrics: median cosine similary for all pairs, median cross-scanner top-10 accuracy, median cross-staining top-10 accuracy, median cross-scanner and cross-staining top-10 accuracy. Median is computed over each corresponding slide pairs (e.g. for cross-scanner, slide pairs with different scanner each but common staining).
+
 <img src="./assets/figure.png">
 
-## Run PLISM benchmark with your model
+### Run PLISM benchmark with your model
 
 The following commands can be run through the cli command `plismbench`.
 You can find a detailed description of each subcommand by typing:
@@ -31,15 +53,24 @@ You can find a detailed description of each subcommand by typing:
 plismbench --help
 ```
 
-## Hardware requirements
+### Hardware requirements
 
 This benchmark can be executed on cpu or gpu. We strongly advise to run it on gpu to benefit from `cupy` acceleration on graphical cards. From downloading to computing the results, running the benchmark takes approximately on our workstation (**32 CPUs, 1 Nvidia T4 (16Go) and 120Gb RAM**):
+
+_With storage do disk_
 
 - 2h45 for a ViT-B: 15 minutes for download, 1h30 for features extraction, 1h for robustness metrics computation.
 - 4h45 for a ViT-g: 15 minutes for download, 3h for features extraction, 1h30 for robustness metrics computation.
 
+_Without storage do disk_
 
-### Download
+- 3h30 for a ViT-B: 2h30 for features extraction, 1h for robustness metrics computation.
+- 6h30 for a ViT-g: 5h for features extraction, 1h30 for robustness metrics computation.
+
+
+### [Optional] Download
+
+**If you don't have 250Go available to store PLISM dataset to disk, we advise you to perform the features extraction by streaming images on the fly (see next section). In that case, you can skip this section.**
 
 First you will need to download [PLISM dataset](https://huggingface.co/datasets/owkin/plism-dataset) hosted on Hugging Face using the following command:
 
@@ -70,8 +101,11 @@ plismbench extract \
     --workers 8
 ```
 
+**Specify ``--streaming`` if you want to perform the download of images on the fly without storing to disk.**
+
+
 > [!NOTE]
-> 10 Gb storage and 1h30 are necessary to extract all features with a ViT-B model, 16 CPUs and 1 Nvidia T4 (16Go).
+> 10 Gb storage and 1h30 are necessary to extract all features with a ViT-B model, 16 CPUs and 1 Nvidia T4 (16Go). 2h30 are necessary if streaming mode is enabled.
 >
 
 > [!IMPORTANT]
@@ -123,20 +157,33 @@ By default, results are available at `/your/metrics/export/dir/8139_tiles/your_e
 | inter-scanner, inter-staining | 0.737 (0.156) ; 0.792 (0.106) | 0.104 (0.108) ; 0.072 (0.127) | 0.197 (0.163) ; 0.166 (0.227) | 0.253 (0.190) ; 0.231 (0.274) | 0.346 (0.226) ; 0.346 (0.335) |
 | all                           | 0.753 (0.158) ; 0.803 (0.106) | 0.153 (0.194) ; 0.089 (0.166) | 0.251 (0.229) ; 0.195 (0.273) | 0.307 (0.244) ; 0.266 (0.321) | 0.397 (0.265) ; 0.387 (0.373) |
 
-You can generate those results from a `metrics.csv` file by using
+You can generate those results by executing:
 
 ```python
-from plismbench.utils.aggregate import get_results
-results = get_results(pd.read_csv("metrics.csv"), top_k=[1, 3, 5, 10]).
+from plismbench.utils.metrics import format_results
+results = format_results(metrics_root_dir="/path/to/metrics/root_dir/")
 ```
 
+Please check `notebooks/visualization.ipynb` for details.
+
+### Get leaderboard results
+
+
+You can generate the leaderboard results from a `metrics.csv` file by using
+
+```python
+from plismbench.utils.metrics import get_leaderboard_results
+leaderboard_results = get_leaderboard_results(metrics_root_dir="/path/to/metrics/root_dir/")
+```
+
+Please check `notebooks/visualization.ipynb` for details.
 
 ## Contribute
 
 Please refer to our [documentation](https://owkin.github.io/plism-benchmark) to follow our contribution guidelines.
 
 > [!IMPORTANT]
-> Please report the output of `results.csv` in your PR description as illustrated above, along with the number of tiles used to compute the metrics.
+> Please report the output of `get_leaderboard_results` in your PR description as illustrated above, along with the number of tiles used to compute the metrics.
 >
 
 ## License
@@ -163,5 +210,5 @@ _to be completed_
 
 
 ## TODO
-- [] Add more tests
-- [] Add benchmark
+- [ ] Add more tests
+- [ ] Add latest models implementation
