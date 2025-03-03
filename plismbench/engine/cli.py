@@ -10,7 +10,8 @@ from huggingface_hub import login, snapshot_download
 from loguru import logger
 
 from plismbench.engine.evaluate import compute_metrics
-from plismbench.engine.extract import FeatureExtractorsEnum, run_extract
+from plismbench.engine.extract.core import run_extract
+from plismbench.models import FeatureExtractorsEnum
 from plismbench.models.utils import DEFAULT_DEVICE
 
 
@@ -36,13 +37,20 @@ def extract(
             ),
         ),
     ],
+    streaming: Annotated[
+        bool,
+        typer.Option(
+            "--streaming",
+            help="Whether to stream images instead of storing to disk (300Go).",
+        ),
+    ] = False,
     download_dir: Annotated[
-        Path,
+        Union[Path, None],
         typer.Option(
             "--download-dir",
             help="Folder containing the .h5 files downloaded from Hugging Face.",
         ),
-    ],
+    ] = None,
     device: Annotated[
         int, typer.Option("--device", help="The CUDA devnumber or -1 for CPU.")
     ] = DEFAULT_DEVICE,
@@ -77,6 +85,7 @@ def extract(
         batch_size=batch_size,
         workers=workers,
         overwrite=overwrite,
+        streaming=streaming,
     )
 
 

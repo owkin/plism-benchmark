@@ -57,9 +57,10 @@ def prepare_pairs_dataframe(features_dir: Path, extractor: str) -> pd.DataFrame:
     slide_features = prepare_features_dataframe(
         features_dir=features_dir, extractor=extractor
     )
-    assert slide_features.shape == (NUM_SLIDES, 4), (
-        "Slide features dataframe should be of shape (91, 4)."
-    )
+    assert slide_features.shape == (
+        NUM_SLIDES,
+        4,
+    ), "Slide features dataframe should be of shape (91, 4)."
 
     pairs = slide_features.merge(slide_features, how="cross", suffixes=("_a", "_b"))
     pairs.set_index(pairs["slide_a"] + "---" + pairs["slide_b"], inplace=True)

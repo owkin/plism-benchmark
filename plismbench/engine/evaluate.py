@@ -12,7 +12,6 @@ from p_tqdm import p_map
 from rich import print as rprint
 from tqdm import tqdm
 
-from plismbench.engine.extract import sort_coords
 from plismbench.utils.aggregate import get_results
 from plismbench.utils.core import load_pickle, write_pickle
 from plismbench.utils.evaluate import (
@@ -143,13 +142,8 @@ def compute_metrics_ab(
     device: str,
     pickles_save_dir: Path,
     overwrite: bool,
-    _sort_coords: bool = False,
 ) -> list[float]:
     """Compute metrics between float16 features from slide a and slide b."""
-    # ``_sort_coords`` should always be set to False unless you extracted
-    # PLISM features your own way without saving (x, y)-sorted features
-    # to disk.
-    sort_coords_fn = sort_coords if _sort_coords else lambda x: x
     # Check if a pickle has already been dumped to disk to avoid computing
     # the metrics twice for a given slides pair.
     pickle_key = "---".join([fp_a.parent.name, fp_b.parent.name])
@@ -163,8 +157,8 @@ def compute_metrics_ab(
                 logger.info(f"{str(pickle_path)} seems to be corrupted:\n{exc}.")
 
     matrix_a, matrix_b = (
-        sort_coords_fn(load_features(fp_a)),
-        sort_coords_fn(load_features(fp_b)),
+        load_features(fp_a),
+        load_features(fp_b),
     )
     # Coordinates should be equal for tiles location matching
     np.testing.assert_allclose(matrix_a[:, :3], matrix_b[:, :3])
@@ -192,7 +186,6 @@ def compute_metrics(
     device: str = "gpu",
     workers: int = 4,
     overwrite: bool = False,
-    _sort_coords: bool = False,
 ):
     """Compute robustness metrics and save it to disk.
 
@@ -216,10 +209,6 @@ def compute_metrics(
         Number of workers for cpu parallel computations if ``device='cpu'``.
     overwrite: bool = False
         Whether to overwrite existing metrics.
-    _sort_coords: bool = False
-        Should always be set to False unless you extracted PLISM features
-        using another code base without saving (x, y)-sorted features
-        to disk.
     """
     # Supported number of tiles correspond to
     # None: DEFAULT_NUM_TILES_PER_SLIDE_METRICS = 8_139
@@ -278,7 +267,6 @@ def compute_metrics(
                 device=device,
                 pickles_save_dir=pickles_save_dir,
                 overwrite=overwrite,
-                _sort_coords=_sort_coords,
             )
             pairs_metrics.append((fp_a, fp_b, *metrics_ab))
     else:
@@ -293,7 +281,6 @@ def compute_metrics(
             device=device,
             pickles_save_dir=pickles_save_dir,
             overwrite=overwrite,
-            _sort_coords=_sort_coords,
         )
         metrics = p_map(
             _compute_metrics_ab,
