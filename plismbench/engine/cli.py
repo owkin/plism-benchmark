@@ -10,7 +10,8 @@ from huggingface_hub import login, snapshot_download
 from loguru import logger
 
 from plismbench.engine.evaluate import compute_metrics
-from plismbench.engine.extract import FeatureExtractorsEnum, run_extract
+from plismbench.engine.extract import run_extract
+from plismbench.models import FeatureExtractorsEnum
 from plismbench.models.utils import DEFAULT_DEVICE
 
 
