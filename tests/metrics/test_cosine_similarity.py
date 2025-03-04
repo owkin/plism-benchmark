@@ -21,14 +21,14 @@ test_data = [
 def test_cosine_similarity(matrix_a, matrix_b, expected):
     """Test cosine similarity metric."""
     # Test cpu
-    metric = CosineSimilarity(device="cpu")
+    metric = CosineSimilarity(device="cpu", use_mixed_precision=False)
     result = metric.compute_metric(matrix_a, matrix_b)
     assert result == pytest.approx(expected)
 
     # Check first if a GPU is available
     if cp.cuda.is_available():
         # Test gpu
-        metric = CosineSimilarity(device="gpu")
+        metric = CosineSimilarity(device="gpu", use_mixed_precision=False)
         result = metric.compute_metric(matrix_a, matrix_b)
         assert result == pytest.approx(expected)
     else:
