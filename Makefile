@@ -43,7 +43,7 @@ lock: ## Generate a new poetry.lock file (To be done after adding new requiremen
 	poetry lock
 
 install-cupy: ## Install GPU accelerated numpy
-	pip install cupy-cuda12x
+	conda install -c conda-forge cupy
 
 install-poetry: ## Install poetry package
 	pip install poetry==1.7.1

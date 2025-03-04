@@ -2,7 +2,11 @@
 
 from abc import abstractmethod
 
-import cupy as cp
+
+try:
+    import cupy as cp
+except ImportError:
+    pass
 import numpy as np
 
 
