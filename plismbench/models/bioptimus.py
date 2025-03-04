@@ -61,7 +61,7 @@ class H0Mini(Extractor):
         """Transform method to apply element wise."""
         return transforms.Compose(
             [
-                transforms.ToTensor(),  # swap axes
+                transforms.ToTensor(),  # swap axes and normalize
                 transforms.Normalize(
                     mean=(0.707223, 0.578729, 0.703617),
                     std=(0.211883, 0.230117, 0.177517),
