@@ -6,8 +6,8 @@ from plismbench.metrics.base import BasePlismMetric
 class CosineSimilarity(BasePlismMetric):
     """Cosine similarity metric."""
 
-    def __init__(self, device: str):
-        super().__init__(device)
+    def __init__(self, device: str, use_mixed_precision: bool = True):
+        super().__init__(device, use_mixed_precision)
 
     def compute_metric(self, matrix_a, matrix_b):
         """Compute cosine similarity metric."""
@@ -21,6 +21,10 @@ class CosineSimilarity(BasePlismMetric):
         # Put matrix_a and matrix_b on the gpu if needed
         matrix_a = self.ncp.asarray(matrix_a)  # shape (n_tiles, n_features)
         matrix_b = self.ncp.asarray(matrix_b)  # shape (n_tiles, n_features)
+
+        if self.use_mixed_precision:
+            matrix_a = matrix_a.astype(self.ncp.float16)
+            matrix_b = matrix_b.astype(self.ncp.float16)
 
         # Compute cosine similarity
         dot_product_ab = self.ncp.matmul(

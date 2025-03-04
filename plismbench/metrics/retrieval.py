@@ -11,26 +11,20 @@ class TopkAccuracy(BasePlismMetric):
     def __init__(
         self,
         device: str,
+        use_mixed_precision: bool = True,
         k: list[int] | None = None,
-        use_mixed_precision: bool = False,
     ):
-        super().__init__(device)
+        super().__init__(device, use_mixed_precision)
         self.k = [1, 3, 5, 10] if k is None else k
-        self.use_mixed_precision = use_mixed_precision
 
-    def compute_metric(self, matrix_a, matrix_b, tiles_subset_idx=None):
+    def compute_metric(self, matrix_a, matrix_b):
         """Compute top-k accuracy metric."""
         if matrix_a.shape[0] != matrix_b.shape[0]:
             raise ValueError(
                 f"Number of tiles must match. Got {matrix_a.shape[0]} and {matrix_b.shape[0]}."
             )
 
-        if tiles_subset_idx is None:  # Use all tiles
-            tiles_subset_idx = np.arange(matrix_a.shape[0])
-
-        matrix_ab = np.concatenate(
-            [matrix_a[tiles_subset_idx], matrix_b[tiles_subset_idx]], axis=0
-        )
+        matrix_ab = np.concatenate([matrix_a, matrix_b], axis=0)
 
         n_tiles = matrix_ab.shape[0] // 2
 

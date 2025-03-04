@@ -84,7 +84,10 @@ def compute_metrics_ab(
     # top-k accuracies. Note: top-k accuracy is computed
     # over a subset of tiles.
     # Warning: convert matrix to float16 !
-    features_a, features_b = matrix_a[:, 3:], matrix_b[:, 3:]
+    features_a, features_b = (
+        matrix_a[tiles_subset_idx, 3:],
+        matrix_b[tiles_subset_idx, 3:],
+    )
 
     ncp = cp if device == "gpu" else np
     if device == "gpu":
@@ -92,7 +95,7 @@ def compute_metrics_ab(
         pinned_mempool = ncp.get_default_pinned_memory_pool()
 
     # Compute cosine similarity
-    cosine_metric = CosineSimilarity(device=device)
+    cosine_metric = CosineSimilarity(device=device, use_mixed_precision=True)
     cosine_similarity = cosine_metric.compute_metric(features_a, features_b)
 
     # Compute top-k accuracies
@@ -100,7 +103,6 @@ def compute_metrics_ab(
     top_k_accuracies = topk_metric.compute_metric(
         matrix_a=features_a,
         matrix_b=features_b,
-        tiles_subset_idx=tiles_subset_idx,
     )
 
     if device == "gpu":

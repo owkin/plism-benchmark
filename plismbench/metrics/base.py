@@ -15,9 +15,10 @@ class BasePlismMetric:
         Device to use for computation.
     """
 
-    def __init__(self, device: str):
+    def __init__(self, device: str, use_mixed_precision: bool = True):
         self.device = device
         self.ncp = cp if device == "gpu" else np
+        self.use_mixed_precision = use_mixed_precision
 
     @abstractmethod
     def compute_metric(self, matrix_a: np.ndarray, matrix_b: np.ndarray):
