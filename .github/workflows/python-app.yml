@@ -37,7 +37,7 @@ jobs:
           git lfs pull
 
       - name: Install dependencies
-        run: poetry install --all-extras --with=testing
+        run: make install-all
 
       - name: Testing
         run: poetry run make test
