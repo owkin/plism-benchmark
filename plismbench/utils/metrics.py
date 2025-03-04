@@ -62,7 +62,7 @@ def rank_results(
     return output.sort_values(robustness_type, ascending=False)
 
 
-def show_aggregated_results(
+def get_aggregated_results(
     results: pd.DataFrame,
     metric_name: str = "top_1_accuracy",
     robustness_type: str = "all",
@@ -101,3 +101,54 @@ def show_aggregated_results(
     )
     ranked_results.insert(0, "extractor", ranked_results.index.values)
     return ranked_results
+
+
+def get_leaderboard_results(
+    metrics_root_dir: Path,
+) -> pd.DataFrame:
+    """Generate leaderboard results."""
+    # Get all results
+    raw_results = format_results(
+        metrics_root_dir=metrics_root_dir, agg_type="median", n_tiles=8139, top_k=None
+    )
+    # Get aggregated results for each type of robustness for cosine similarity and top 10 accuracy
+    cosine_sim_results = get_aggregated_results(
+        results=raw_results, metric_name="cosine_similarity", agg_type="median"
+    )
+    top_10_acc_results = get_aggregated_results(
+        results=raw_results, metric_name="top_10_accuracy", agg_type="median"
+    )
+    # Merge the 2 dataframes into one
+    leaderboard_cols = [
+        "all_cosine_similarity",
+        "inter-scanner_top_10_accuracy",
+        "inter-staining_top_10_accuracy",
+        "inter-scanner, inter-staining_top_10_accuracy",
+    ]
+    leaderboard_cols_labels = [
+        "Cosine similarity (all)",
+        "Top-10 accuracy (cross-scanner)",
+        "Top-10 accuracy (cross-staining)",
+        "Top-10 accuracy (cross-scanner, cross-staining)",
+    ]
+    leaderboard_results = (
+        cosine_sim_results.sort_index()
+        .merge(
+            top_10_acc_results.iloc[:, 1:],
+            left_index=True,
+            right_index=True,
+            suffixes=("_cosine_similarity", "_top_10_accuracy"),
+        )[leaderboard_cols]
+        .astype(float)
+    )
+    leaderboard_results.columns = leaderboard_cols_labels  # type: ignore
+    leaderboard_results.insert(
+        4, "Leaderboard metric", leaderboard_results.mean(axis=1).round(3)
+    )
+    leaderboard_results = leaderboard_results.sort_values(
+        "Leaderboard metric", ascending=False
+    )
+    leaderboard_results["Rank"] = [
+        f"#{i}" for i in range(1, leaderboard_results.shape[0] + 1)
+    ]
+    return leaderboard_results
