@@ -1,6 +1,5 @@
 """Test module for retrieval metrics."""
 
-import cupy as cp
 import numpy as np
 import pytest
 
@@ -28,6 +27,13 @@ def test_topk_accuracy(matrix_a, matrix_b, k, expected):
 
     # Check np array equality
     assert result == pytest.approx(expected)
+
+
+@pytest.mark.local
+@pytest.mark.parametrize(("matrix_a", "matrix_b", "k", "expected"), test_data)
+def test_topk_accuracy_gpu(matrix_a, matrix_b, k, expected):
+    """Test top-k accuracy metric on GPU."""
+    import cupy as cp
 
     # Check first if a GPU is available
     if cp.cuda.is_available():

@@ -95,8 +95,11 @@ pre-commit-checks: ## Run pre-commit checks on all files
 
 lint-all: pre-commit-checks lint typing ## Run all linting checks.
 
-test: ## Run tests quickly with the default Python
+test-all: ## Run CI tests quickly with the default Python
 	pytest
+
+test: ## Run CI tests quickly with the default Python
+	pytest -m "not local"
 
 test-docs: docs-api ## Check docs using doc8
 	pydocstyle plismbench
