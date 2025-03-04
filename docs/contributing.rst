@@ -88,9 +88,10 @@ Guidelines
 To contribute to the PLISM robustness benchmark project, follow these steps:
 
     1. Fork the `Github repository <https://github.com/owkin/plism-benchmark>`_.
-    2. Create a new branch for your changes, implement them and commit them with clear commit messages.
-    3. Push your changes to your branch.
-    4. Open a pull request in the ``main`` branch of the `Github repository <https://github.com/owkin/plism-benchmark>`_.
+    2. Create a new branch for your changes.
+    3. Implement them and commit them with clear commit messages.
+    4. Push your changes to your branch.
+    5. Open a pull request in the ``main`` branch of the `Github repository <https://github.com/owkin/plism-benchmark>`_.
 
 When opening a pull request, make sure to include a clear description of your changes
 and why they are necessary.
