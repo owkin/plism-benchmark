@@ -6,7 +6,10 @@ build-backend = "poetry.core.masonry.api"
 name = "owkin-plismbench"
 version = "0.0.0"
 description = "Repository hosting PLISM robustness benchmark"
-authors = ["Alexandre Filiot <alexandre.filiot@owkin.com>"]
+authors = [
+  "Alexandre Filiot <alexandre.filiot@owkin.com>",
+  "Antoine Olivier <antoine.olivier@owkin.com>",
+]
 
 readme = "README.md"
 homepage = "https://github.com/owkin/plism-benchmark"

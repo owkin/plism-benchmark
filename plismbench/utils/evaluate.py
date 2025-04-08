@@ -69,7 +69,7 @@ def prepare_pairs_dataframe(features_dir: Path, extractor: str) -> pd.DataFrame:
         for (a, b) in set(itertools.combinations(slide_features["slide"], 2))
     ]
     pairs = (
-        pairs.loc[unique_pairs]
+        pairs.loc[unique_pairs]  # type: ignore
         .sort_values(["features_path_a", "features_path_b"])
         .reset_index(drop=True)
     )

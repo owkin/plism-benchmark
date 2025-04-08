@@ -105,7 +105,7 @@ for testing. To run the tests, simply run:
 
 .. code-block:: console
 
-    $ make test
+    $ make test-all
 
 
 Make sure that all tests pass before submitting a pull request.
