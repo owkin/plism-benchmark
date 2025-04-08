@@ -2,6 +2,7 @@
 
 import numpy as np
 import pytest
+from loguru import logger
 
 from plismbench.metrics.cosine_similarity import CosineSimilarity
 
@@ -38,4 +39,4 @@ def test_cosine_similarity_gpu(matrix_a, matrix_b, expected):
         result = metric.compute_metric(matrix_a, matrix_b)
         assert result == pytest.approx(expected)
     else:
-        print("No GPU available. Skipping GPU test.")
+        logger.info("No GPU available. Skipping GPU test.")

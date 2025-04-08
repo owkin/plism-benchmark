@@ -83,10 +83,9 @@ def compute_metrics_ab(
         matrix_b[tiles_subset_idx, 3:],
     )
 
-    ncp = cp if device == "gpu" else np
     if device == "gpu":
-        mempool = ncp.get_default_memory_pool()
-        pinned_mempool = ncp.get_default_pinned_memory_pool()
+        mempool = cp.get_default_memory_pool()
+        pinned_mempool = cp.get_default_pinned_memory_pool()
 
     # Compute cosine similarity
     cosine_metric = CosineSimilarity(device=device, use_mixed_precision=True)

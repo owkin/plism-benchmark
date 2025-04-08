@@ -2,6 +2,7 @@
 
 import numpy as np
 import pytest
+from loguru import logger
 
 from plismbench.metrics.retrieval import TopkAccuracy
 
@@ -42,4 +43,4 @@ def test_topk_accuracy_gpu(matrix_a, matrix_b, k, expected):
         result = metric.compute_metric(matrix_a, matrix_b)
         assert result == pytest.approx(expected)
     else:
-        print("No GPU available. Skipping GPU test.")
+        logger.info("No GPU available. Skipping GPU test.")

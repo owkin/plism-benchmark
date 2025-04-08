@@ -2,11 +2,15 @@
 
 from abc import abstractmethod
 
+from loguru import logger
+
 
 try:
     import cupy as cp
-except ImportError:
-    pass
+except ImportError as error:
+    logger.error(
+        f"cupy is not installed. Please run `make install-cupy`.\nError: {error}."
+    )
 import numpy as np
 
 
@@ -27,3 +31,4 @@ class BasePlismMetric:
     @abstractmethod
     def compute_metric(self, matrix_a: np.ndarray, matrix_b: np.ndarray):
         """Compute metric between feature matrices A and B."""
+        raise NotImplementedError
