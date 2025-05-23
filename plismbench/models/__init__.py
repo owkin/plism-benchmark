@@ -5,6 +5,8 @@ from __future__ import annotations
 from enum import Enum
 
 from plismbench.models.bioptimus import H0Mini
+from plismbench.models.extractor import Extractor
+from plismbench.models.owkin import AquaViT120M105k
 
 
 class StringEnum(Enum):
@@ -25,15 +27,21 @@ class FeatureExtractorsEnum(StringEnum):
     # please follow the format "upper case = lower case"
     # this should map exactly the name in constants
     H0_MINI = "h0_mini"
+    AQUAVIT_120M_105K = "aquavit_120M_105k"
 
-    def init(self, device: int | list[int] | None, **kwargs):
+    def init(self, device: int | list[int] | None, **kwargs) -> Extractor:
         """Initialize the feature extractor."""
         if self is self.H0_MINI:
-            feature_extractor = H0Mini(
+            return H0Mini(
+                device=device,
+                mixed_precision=True,  # don't change this value
+                **kwargs,
+            )
+        elif self is self.AQUAVIT_120M_105K:
+            return AquaViT120M105k(
                 device=device,
                 mixed_precision=True,  # don't change this value
                 **kwargs,
             )
         else:
             raise NotImplementedError(f"Extractor {self} is not supported.")
-        return feature_extractor
