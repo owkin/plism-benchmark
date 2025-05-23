@@ -13,6 +13,9 @@ pd.set_option("future.no_silent_downcasting", True)
 
 # Please leave those 2 dictionnaries as is.
 EXTRACTOR_LABELS_DICT = {
+    "aquavit_105k": "AquaViT 105k",
+    "aquavit": "AquaViT",
+    "aquavit_120M_105k": "AquaViT 105k (120M)",
     "conch": "CONCH",
     "gpfm": "GPFM",
     "hibou_vit_base": "Hibou Base",
@@ -31,6 +34,9 @@ EXTRACTOR_LABELS_DICT = {
     "virchow2": "Virchow2",
 }
 EXTRACTOR_PARAMETERS_DICT = {
+    "aquavit_105k": 86_000_000,
+    "aquavit": 86_000_000,
+    "aquavit_120M_105k": 86_000_000,
     "conch": 86_000_000,
     "gpfm": 307_000_000,
     "hibou_vit_base": 86_000_000,
