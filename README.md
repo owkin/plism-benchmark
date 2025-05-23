@@ -101,6 +101,8 @@ plismbench extract \
     --workers 8
 ```
 
+The output features directory will automatically be set to `export_dir/extractor`.
+
 **Specify ``--streaming`` if you want to perform the download of images on the fly without storing to disk.**
 
 
@@ -127,6 +129,8 @@ plismbench evaluate \
     --features-dir /your/features/previous/export/dir/ \
     --metrics-dir /your/metrics/export/dir/
 ```
+
+The input features directory will automatically be set to `export_dir/extractor`.
 
 > [!NOTE]
 > 1h is necessary to compute metrics for a ViT-B model, 16 CPUs and 1 Nvidia T4 (16Go).
