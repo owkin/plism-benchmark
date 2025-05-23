@@ -37,7 +37,7 @@ def prepare_features_dataframe(features_dir: Path, extractor: str) -> pd.DataFra
     features_paths = {
         fp: fp.parent.name
         for fp in (features_dir / extractor).glob("*/features.npy")
-        if "_to_GMH_S60.tif" in str(fp)
+        if "_to_GMH_S60" in str(fp)
     }
     # Prepare list of slide names, staining, and scanner directly
     slide_data = []
