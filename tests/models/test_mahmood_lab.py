@@ -1,4 +1,4 @@
-"""Tests for Bioptimus, Inc. feature extractors."""
+"""Tests for Mahmood Lab feature extractors."""
 
 from __future__ import annotations
 
@@ -7,34 +7,35 @@ import pytest
 import torch
 from PIL import Image
 
-from plismbench.models.bioptimus import H0Mini, HOptimus0, HOptimus1  # noqa
 from plismbench.models.extractor import Extractor
+from plismbench.models.mahmood_lab import CONCH, UNI, CONCHv15, UNI2h
 
 
 @pytest.mark.parametrize(
     ("extractor", "expected_output_dim"),
     [
-        (H0Mini, 768),
-        (HOptimus0, 1536),
-        # (HOptimus1, 1536) # access is not granted for now
+        (UNI, 1024),
+        (UNI2h, 1536),
+        (CONCH, 512),
+        (CONCHv15, 768),
     ],
 )
-def test_bioptimus_cpu(
+def test_mahmood_lab_cpu(
     extractor: type[Extractor],
     expected_output_dim: int,
 ) -> None:
-    """Bioptimus models test on CPU."""
-    bioptimus_model = extractor(device=-1)
+    """Mahmood Lab models test on CPU."""
+    mlab_model = extractor(device=-1)
 
     x = np.random.rand(224, 224, 3) * 255
     x = Image.fromarray(x.astype("uint8")).convert("RGB")
 
-    transformed_x = bioptimus_model.transform(x)
+    transformed_x = mlab_model.transform(x)
 
     assert isinstance(transformed_x, torch.Tensor)
     assert transformed_x.shape == (3, 224, 224)
 
-    features = bioptimus_model(transformed_x.unsqueeze(0))
+    features = mlab_model(transformed_x.unsqueeze(0))
 
     assert isinstance(features, np.ndarray)
     assert features.shape == (1, expected_output_dim)
@@ -44,21 +45,22 @@ def test_bioptimus_cpu(
 @pytest.mark.parametrize(
     ("extractor", "expected_output_dim"),
     [
-        (H0Mini, 768),
-        (HOptimus0, 1536),
-        # (HOptimus1, 1536) # access is not granted for now
+        (UNI, 1024),
+        (UNI2h, 1536),
+        (CONCH, 512),
+        (CONCHv15, 768),
     ],
 )
-def test_bioptimus_gpu(
+def test_mahmood_lab_gpu(
     extractor: type[Extractor],
     expected_output_dim: int,
 ) -> None:
-    """Bioptimus models test on GPU."""
+    """Mahmood Lab models test on GPU."""
     x = torch.randn((1, 3, 224, 224))
 
-    bioptimus_model = extractor(device=0)
+    mlab_model = extractor(device=0)
 
-    features = bioptimus_model(x)
+    features = mlab_model(x)
 
     assert isinstance(features, np.ndarray)
     assert features.shape == (1, expected_output_dim)

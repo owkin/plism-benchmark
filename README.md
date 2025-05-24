@@ -206,7 +206,22 @@ We thank PLISM dataset's authors for their unique contribution.
 ## How to cite
 
 If you are using this dataset, please cite the original article (Ochi et al., 2024) and our work as follows:
-_to be completed_
+
+Filiot, A., Dop, N., Tchita, O., Riou, A., Peeters, T., Valter, D., Scalbert, M., Saillard, C., Robin, G., & Olivier, A. (2025). Distilling foundation models for robust and efficient models in digital pathology. arXiv. https://arxiv.org/abs/2501.16239
+
+or
+
+```
+@misc{filiot2025distillingfoundationmodelsrobust,
+      title={Distilling foundation models for robust and efficient models in digital pathology},
+      author={Alexandre Filiot and Nicolas Dop and Oussama Tchita and Auriane Riou and Thomas Peeters and Daria Valter and Marin Scalbert and Charlie Saillard and Geneviève Robin and Antoine Olivier},
+      year={2025},
+      eprint={2501.16239},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2501.16239},
+}
+```
 
 ## References
 
@@ -214,5 +229,8 @@ _to be completed_
 
 
 ## TODO
-- [ ] Add more tests
-- [ ] Add latest models implementation
+- [ ] Add CTransPath
+- [ ] Add Lunit-Base
+- [ ] Add PLIP
+- [ ] Add HIPT tile encoder
+- [ ] Add DINO V2 ViT-g pre-trained on ImageNet

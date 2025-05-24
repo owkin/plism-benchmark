@@ -1,4 +1,4 @@
-"""Genertic utilty functions."""
+"""Generic utilty functions."""
 
 import pickle
 from pathlib import Path

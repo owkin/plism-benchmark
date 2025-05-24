@@ -92,3 +92,19 @@ def prepare_module(
     module.requires_grad_(False)
 
     return module, device_
+
+
+def prepare_device(gpu: None | int | list[int] = None) -> str:
+    """Prepare device, copied from `tilingtool.utils.parallel::prepare_module`."""
+    if gpu == -1 or not (
+        torch.cuda.is_available() or torch.backends.mps.is_available()
+    ):
+        device = "cpu"
+    elif torch.backends.mps.is_available():
+        device = str(torch.device("mps"))
+    elif isinstance(gpu, int):
+        device = f"cuda:{gpu}"
+    else:
+        # Use DataParallel to distribute the module on all GPUs
+        device = "cuda:0" if gpu is None else f"cuda:{gpu[0]}"
+    return device

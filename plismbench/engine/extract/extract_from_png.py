@@ -74,7 +74,6 @@ def run_extract_streaming(
         device=device
     )
     image_transform = feature_extractor.transform
-    device = feature_extractor.device
 
     # Create the dataset and dataloader without actually loading the files to disk (`streaming=True`)
     # The dataset is sorted by slide_id, meaning that the first 16278 indexes belong to the same first slide,

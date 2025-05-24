@@ -1,4 +1,4 @@
-"""Tests for Bioptimus, Inc. feature extractors."""
+"""Tests for Paige AI feature extractors."""
 
 from __future__ import annotations
 
@@ -7,34 +7,33 @@ import pytest
 import torch
 from PIL import Image
 
-from plismbench.models.bioptimus import H0Mini, HOptimus0, HOptimus1  # noqa
 from plismbench.models.extractor import Extractor
+from plismbench.models.paige_ai import Virchow, Virchow2
 
 
 @pytest.mark.parametrize(
     ("extractor", "expected_output_dim"),
     [
-        (H0Mini, 768),
-        (HOptimus0, 1536),
-        # (HOptimus1, 1536) # access is not granted for now
+        (Virchow, 2048),
+        (Virchow2, 2560),
     ],
 )
-def test_bioptimus_cpu(
+def test_paige_cpu(
     extractor: type[Extractor],
     expected_output_dim: int,
 ) -> None:
-    """Bioptimus models test on CPU."""
-    bioptimus_model = extractor(device=-1)
+    """Paige AI models test on CPU."""
+    paige_ai_model = extractor(device=-1)
 
     x = np.random.rand(224, 224, 3) * 255
     x = Image.fromarray(x.astype("uint8")).convert("RGB")
 
-    transformed_x = bioptimus_model.transform(x)
+    transformed_x = paige_ai_model.transform(x)
 
     assert isinstance(transformed_x, torch.Tensor)
     assert transformed_x.shape == (3, 224, 224)
 
-    features = bioptimus_model(transformed_x.unsqueeze(0))
+    features = paige_ai_model(transformed_x.unsqueeze(0))
 
     assert isinstance(features, np.ndarray)
     assert features.shape == (1, expected_output_dim)
@@ -44,21 +43,20 @@ def test_bioptimus_cpu(
 @pytest.mark.parametrize(
     ("extractor", "expected_output_dim"),
     [
-        (H0Mini, 768),
-        (HOptimus0, 1536),
-        # (HOptimus1, 1536) # access is not granted for now
+        (Virchow, 2048),
+        (Virchow2, 2560),
     ],
 )
-def test_bioptimus_gpu(
+def test_paige_gpu(
     extractor: type[Extractor],
     expected_output_dim: int,
 ) -> None:
-    """Bioptimus models test on GPU."""
+    """Paige AI models test on GPU."""
     x = torch.randn((1, 3, 224, 224))
 
-    bioptimus_model = extractor(device=0)
+    paige_ai_model = extractor(device=0)
 
-    features = bioptimus_model(x)
+    features = paige_ai_model(x)
 
     assert isinstance(features, np.ndarray)
     assert features.shape == (1, expected_output_dim)

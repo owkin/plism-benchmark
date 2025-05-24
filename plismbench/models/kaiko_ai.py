@@ -1,23 +1,22 @@
-"""Models from Bioptimus company."""
+"""Models from Kaiko AI company."""
 
 from __future__ import annotations
 
-from typing import Any
-
 import numpy as np
-import timm
 import torch
 from torchvision import transforms
+from transformers import AutoModel
 
 from plismbench.models.extractor import Extractor
 from plismbench.models.utils import DEFAULT_DEVICE, prepare_module
 
 
-class HOptimus0(Extractor):
-    """H-Optimus-0 model developped by Bioptimus available on Hugging-Face (1).
+class KaikoViTBase(Extractor):
+    """Kaiko ViT-Base model available on Pytorch Hub (1-2).
 
     .. note::
-        (1) https://huggingface.co/bioptimus/H-optimus-0
+        (1) kaiko. ai, Aben, N., de Jong, E. D., Gatopoulos, I., Känzig, N., Karasikov, M., Lagré, A., Moser, R., van Doorn, J., & Tang, F. (2024). Towards large-scale training of pathology foundation models. arXiv. https://arxiv.org/abs/2404.15217
+        (2) https://github.com/kaiko-ai/towards_large_pathology_fms
 
     Parameters
     ----------
@@ -27,7 +26,6 @@ class HOptimus0(Extractor):
         If -1, extraction will run on CPU.
     mixed_precision: bool = True
         Whether to use mixed_precision.
-
     """
 
     def __init__(
@@ -38,12 +36,11 @@ class HOptimus0(Extractor):
         super().__init__()
         self.mixed_precision = mixed_precision
 
-        timm_kwargs: dict[str, Any] = {
-            "init_values": 1e-5,
-            "dynamic_img_size": False,
-        }
-        feature_extractor = timm.create_model(
-            "hf-hub:bioptimus/H-optimus-0", pretrained=True, **timm_kwargs
+        feature_extractor = torch.hub.load(
+            "kaiko-ai/towards_large_pathology_fms",
+            "vitb8",
+            trust_repo=True,
+            verbose=True,
         )
 
         self.feature_extractor, self.device = prepare_module(
@@ -61,8 +58,8 @@ class HOptimus0(Extractor):
             [
                 transforms.ToTensor(),  # swap axes and normalize
                 transforms.Normalize(
-                    mean=(0.707223, 0.578729, 0.703617),
-                    std=(0.211883, 0.230117, 0.177517),
+                    mean=(0.5, 0.5, 0.5),
+                    std=(0.5, 0.5, 0.5),
                 ),
             ]
         )
@@ -83,13 +80,12 @@ class HOptimus0(Extractor):
         return features.cpu().numpy()
 
 
-class H0Mini(Extractor):
-    """H0-mini model developped by Owkin & Bioptimus available on Hugging-Face (1).
-
-    You will need to be granted access to be able to use this model.
+class KaikoViTLarge(Extractor):
+    """Kaiko ViT-Large model available on Pytorch Hub (1-2).
 
     .. note::
-        (1) https://huggingface.co/bioptimus/H0-mini
+        (1) kaiko. ai, Aben, N., de Jong, E. D., Gatopoulos, I., Känzig, N., Karasikov, M., Lagré, A., Moser, R., van Doorn, J., & Tang, F. (2024). Towards large-scale training of pathology foundation models. arXiv. https://arxiv.org/abs/2404.15217
+        (2) https://github.com/kaiko-ai/towards_large_pathology_fms
 
     Parameters
     ----------
@@ -99,7 +95,6 @@ class H0Mini(Extractor):
         If -1, extraction will run on CPU.
     mixed_precision: bool = True
         Whether to use mixed_precision.
-
     """
 
     def __init__(
@@ -110,12 +105,11 @@ class H0Mini(Extractor):
         super().__init__()
         self.mixed_precision = mixed_precision
 
-        timm_kwargs: dict[str, Any] = {
-            "mlp_layer": timm.layers.SwiGLUPacked,
-            "act_layer": torch.nn.SiLU,
-        }
-        feature_extractor = timm.create_model(
-            "hf-hub:bioptimus/H0-mini", pretrained=True, **timm_kwargs
+        feature_extractor = torch.hub.load(
+            "kaiko-ai/towards_large_pathology_fms",
+            "vitl14",
+            trust_repo=True,
+            verbose=True,
         )
 
         self.feature_extractor, self.device = prepare_module(
@@ -133,8 +127,8 @@ class H0Mini(Extractor):
             [
                 transforms.ToTensor(),  # swap axes and normalize
                 transforms.Normalize(
-                    mean=(0.707223, 0.578729, 0.703617),
-                    std=(0.211883, 0.230117, 0.177517),
+                    mean=(0.5, 0.5, 0.5),
+                    std=(0.5, 0.5, 0.5),
                 ),
             ]
         )
@@ -152,17 +146,14 @@ class H0Mini(Extractor):
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
         features = self.feature_extractor(images.to(self.device))
-        features = features[:, 0]  # only cls token
         return features.cpu().numpy()
 
 
-class HOptimus1(Extractor):
-    """H-Optimus-1 model developped by Bioptimus available on Hugging-Face (1).
-
-    You will need to be granted access to be able to use this model.
+class Midnight12k(Extractor):
+    """Midnight-12k model developped by Kaiko AI available on Hugging-Face (1).
 
     .. note::
-        (1) https://huggingface.co/bioptimus/H-optimus-1
+        (1) https://huggingface.co/kaiko-ai/midnight
 
     Parameters
     ----------
@@ -183,13 +174,7 @@ class HOptimus1(Extractor):
         super().__init__()
         self.mixed_precision = mixed_precision
 
-        timm_kwargs: dict[str, Any] = {
-            "init_values": 1e-5,
-            "dynamic_img_size": False,
-        }
-        feature_extractor = timm.create_model(
-            "hf-hub:bioptimus/H-optimus-1", pretrained=True, **timm_kwargs
-        )
+        feature_extractor = AutoModel.from_pretrained("kaiko-ai/midnight")
 
         self.feature_extractor, self.device = prepare_module(
             feature_extractor,
@@ -206,8 +191,8 @@ class HOptimus1(Extractor):
             [
                 transforms.ToTensor(),  # swap axes and normalize
                 transforms.Normalize(
-                    mean=(0.707223, 0.578729, 0.703617),
-                    std=(0.211883, 0.230117, 0.177517),
+                    mean=(0.5, 0.5, 0.5),
+                    std=(0.5, 0.5, 0.5),
                 ),
             ]
         )
@@ -225,4 +210,7 @@ class HOptimus1(Extractor):
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
         features = self.feature_extractor(images.to(self.device))
+        class_token = features.last_hidden_state[:, 0]
+        patch_tokens = features.last_hidden_state[:, 1:]
+        features = torch.cat([class_token, patch_tokens.mean(1)], dim=-1)
         return features.cpu().numpy()

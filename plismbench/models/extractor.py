@@ -11,6 +11,7 @@ class Extractor(ABC):
     """A base class for :mod:`plismbench` extractors."""
 
     _feature_extractor: torch.nn.Module
+    device: str | torch.device
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
