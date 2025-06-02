@@ -226,11 +226,3 @@ or
 ## References
 
 - (Ochi et al., 2024) Ochi, M., Komura, D., Onoyama, T. et al. Registered multi-device/staining histology image dataset for domain-agnostic machine learning models. Sci Data 11, 330 (2024).
-
-
-## TODO
-- [ ] Add CTransPath
-- [ ] Add Lunit-Base
-- [ ] Add PLIP
-- [ ] Add HIPT tile encoder
-- [ ] Add DINO V2 ViT-g pre-trained on ImageNet
