@@ -53,7 +53,7 @@ jobs:
           git lfs pull
 
       - name: Install dependencies
-        run: make install-all
+        run: make install
 
       - name: Testing
         run: poetry run make test
