@@ -1,12 +1,10 @@
-"""Models from Hong Kong University of Science and Technology."""
+"""Models from Lunit company."""
 
 from __future__ import annotations
 
-import re
-
 import numpy as np
-import timm
 import torch
+from timm.models.vision_transformer import VisionTransformer
 from torchvision import transforms
 
 from plismbench.models.extractor import Extractor
@@ -14,27 +12,11 @@ from plismbench.models.utils import DEFAULT_DEVICE, prepare_module
 from plismbench.utils.core import download_state_dict
 
 
-def _convert_state_dict(state_dict: dict) -> dict:
-    """Rename state dict keys to match timm's format."""
-    state_dict = {
-        re.sub(r"blocks\.\d+\.(\d+)", r"blocks.\1", key.replace("backbone.", "")): value
-        for key, value in state_dict.items()
-    }
-    remove_keys = ["mask_token"] + [
-        key for key in state_dict.keys() if "dino_head" in key
-    ]
-    for key in remove_keys:
-        state_dict.pop(key)
-    return state_dict
-
-
-class GPFM(Extractor):
-    """GPFM model developped by HKUST (1).
+class LunitViTS8(Extractor):
+    """ViT-S/8 from Lunit available at (1).
 
     .. note::
-        (1)     Ma, J., Guo, Z., Zhou, F., Wang, Y., Xu, Y., et al. (2024).
-    Towards a generalizable pathology foundation model via unified knowledge
-    distillation (arXiv No. 2407.18449). arXiv. https://arxiv.org/abs/2407.18449
+        (1) https://github.com/lunit-io/benchmark-ssl-pathology/releases/tag/pretrained-weights
 
     Parameters
     ----------
@@ -55,26 +37,19 @@ class GPFM(Extractor):
         super().__init__()
         self.mixed_precision = mixed_precision
 
-        _state_dict_path = download_state_dict(
-            url="https://github.com/birkhoffkiki/GPFM/releases/download/ckpt/GPFM.pth",
-            name="GPFM.pth",
-        )
-        _state_dict = torch.load(_state_dict_path, map_location="cpu")
-        state_dict = _convert_state_dict(_state_dict["teacher"])
-
-        feature_extractor = timm.create_model(
-            model_name="vit_large_patch14_dinov2",
-            pretrained=True,
-            pretrained_cfg={
-                "state_dict": state_dict,
-                "num_classes": 0,
-            },
+        feature_extractor = VisionTransformer(
             img_size=224,
-            patch_size=14,
-            init_values=1e-5,
-            qkv_bias=True,
-            dynamic_img_size=True,
+            patch_size=8,
+            embed_dim=384,
+            num_heads=6,
+            num_classes=0,
         )
+        state_dict_path = download_state_dict(
+            url="https://github.com/lunit-io/benchmark-ssl-pathology/releases/download/pretrained-weights/dino_vit_small_patch8_ep200.torch",
+            name="lunit_vit_s8.pth",
+        )
+        state_dict = torch.load(state_dict_path, map_location="cpu")
+        feature_extractor.load_state_dict(state_dict, strict=False)
 
         self.feature_extractor, self.device = prepare_module(
             feature_extractor,
@@ -91,7 +66,8 @@ class GPFM(Extractor):
             [
                 transforms.ToTensor(),
                 transforms.Normalize(
-                    mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)
+                    mean=(0.70322989, 0.53606487, 0.66096631),
+                    std=(0.21716536, 0.26081574, 0.20723464),
                 ),
             ]
         )

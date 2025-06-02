@@ -9,6 +9,7 @@ from plismbench.models.extractor import Extractor
 from plismbench.models.histai import HibouBase, HibouLarge
 from plismbench.models.hkust import GPFM
 from plismbench.models.kaiko_ai import KaikoViTBase, KaikoViTLarge, Midnight12k
+from plismbench.models.lunit import LunitViTS8
 from plismbench.models.mahmood_lab import CONCH, UNI, CONCHv15, UNI2h
 from plismbench.models.meta import Dinov2ViTGiant
 from plismbench.models.microsoft import ProvGigaPath
@@ -71,6 +72,9 @@ class FeatureExtractorsEnum(StringEnum):
 
     # Standford
     PLIP = "plip"
+
+    # Lunit
+    LUNIT_VIT_SMALL_8 = "lunit_vit_small_8"
 
     # Meta
     DINOV2_VIT_GIANT = "dinov2_vit_giant"
@@ -193,6 +197,12 @@ class FeatureExtractorsEnum(StringEnum):
             )
         elif self is self.DINOV2_VIT_GIANT:
             return Dinov2ViTGiant(
+                device=device,
+                mixed_precision=True,  # don't change this value
+                **kwargs,
+            )
+        elif self is self.LUNIT_VIT_SMALL_8:
+            return LunitViTS8(
                 device=device,
                 mixed_precision=True,  # don't change this value
                 **kwargs,

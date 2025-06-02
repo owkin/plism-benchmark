@@ -1,4 +1,4 @@
-"""Tests for Paige AI feature extractors."""
+"""Tests for Lunit feature extractors."""
 
 from __future__ import annotations
 
@@ -8,32 +8,29 @@ import torch
 from PIL import Image
 
 from plismbench.models.extractor import Extractor
-from plismbench.models.paige_ai import Virchow, Virchow2
+from plismbench.models.lunit import LunitViTS8
 
 
 @pytest.mark.parametrize(
     ("extractor", "expected_output_dim"),
-    [
-        (Virchow, 2560),
-        (Virchow2, 2560),
-    ],
+    [(LunitViTS8, 384)],
 )
-def test_paige_cpu(
+def test_lunit_cpu(
     extractor: type[Extractor],
     expected_output_dim: int,
 ) -> None:
-    """Paige AI models test on CPU."""
-    paige_ai_model = extractor(device=-1)
+    """Lunit models test on CPU."""
+    lunit_model = extractor(device=-1)
 
     x = np.random.rand(224, 224, 3) * 255
     x = Image.fromarray(x.astype("uint8")).convert("RGB")
 
-    transformed_x = paige_ai_model.transform(x)
+    transformed_x = lunit_model.transform(x)
 
     assert isinstance(transformed_x, torch.Tensor)
     assert transformed_x.shape == (3, 224, 224)
 
-    features = paige_ai_model(transformed_x.unsqueeze(0))
+    features = lunit_model(transformed_x.unsqueeze(0))
 
     assert isinstance(features, np.ndarray)
     assert features.shape == (1, expected_output_dim)
@@ -42,21 +39,18 @@ def test_paige_cpu(
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA not available.")
 @pytest.mark.parametrize(
     ("extractor", "expected_output_dim"),
-    [
-        (Virchow, 2560),
-        (Virchow2, 2560),
-    ],
+    [(LunitViTS8, 384)],
 )
-def test_paige_gpu(
+def test_lunit_gpu(
     extractor: type[Extractor],
     expected_output_dim: int,
 ) -> None:
-    """Paige AI models test on GPU."""
+    """Lunit models test on GPU."""
     x = torch.randn((1, 3, 224, 224))
 
-    paige_ai_model = extractor(device=0)
+    lunit_model = extractor(device=0)
 
-    features = paige_ai_model(x)
+    features = lunit_model(x)
 
     assert isinstance(features, np.ndarray)
     assert features.shape == (1, expected_output_dim)

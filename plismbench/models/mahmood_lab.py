@@ -273,13 +273,6 @@ class CONCHv15(Extractor):
         """Transform method to apply element wise."""
         return transforms.Compose(
             [
-                transforms.Resize(
-                    size=448,
-                    interpolation=transforms.InterpolationMode.BILINEAR,
-                    max_size=None,
-                    antialias=True,
-                ),
-                transforms.CenterCrop(size=(448, 448)),
                 transforms.ToTensor(),
                 transforms.Normalize(
                     mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)
