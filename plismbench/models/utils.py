@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import torch
+from transformers.models.dinov2.modeling_dinov2 import Dinov2Model
 
 
 DEFAULT_DEVICE = (
@@ -23,12 +24,17 @@ class MixedPrecisionModule(torch.nn.Module):
         super(MixedPrecisionModule, self).__init__()
         self.module = module
         self.device_type = device_type
+        self.is_dinov2_model = isinstance(self.module, Dinov2Model)
 
     def forward(self, *args, **kwargs):
         """Forward pass using ``autocast``."""
         # Mixed precision forward
         with torch.amp.autocast(device_type=self.device_type):
             output = self.module(*args, **kwargs)
+            # Only retrieve the last hidden layer state from
+            # transformers.modeling_outputs.BaseModelOutputWithPooling
+            if self.is_dinov2_model:
+                output = output[0]  # second item is the `pooler_output`
 
         if not isinstance(output, torch.Tensor):
             raise ValueError(
