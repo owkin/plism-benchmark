@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import torch
 from torchvision import transforms
-from transformers import AutoImageProcessor, AutoModel, ViTModel
+from transformers import AutoImageProcessor, AutoModel
 
 from plismbench.models.extractor import Extractor
 from plismbench.models.utils import DEFAULT_DEVICE, prepare_module
@@ -37,9 +37,10 @@ class Phikon(Extractor):
         self.mixed_precision = mixed_precision
 
         self.processor = AutoImageProcessor.from_pretrained("owkin/phikon")
-        feature_extractor = ViTModel.from_pretrained(
-            "owkin/phikon", add_pooling_layer=False
-        )
+        # feature_extractor = ViTModel.from_pretrained(
+        #    "owkin/phikon", add_pooling_layer=False
+        # )
+        feature_extractor = AutoModel.from_pretrained("owkin/phikon")
 
         self.feature_extractor, self.device = prepare_module(
             feature_extractor,
@@ -71,8 +72,16 @@ class Phikon(Extractor):
         -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
-        outputs = self.feature_extractor(images.to(self.device))
-        features = outputs.last_hidden_state[:, 0, :]
+        output = self.feature_extractor(images.to(self.device))
+        # If mixed precision is disabled, then the output is a list of
+        # 2 items: last_hidden_state and pooler_output.
+        # We only extract the hidden state, which is already handled
+        # when mixed precision is enabled (see `plismbench.models.utils.MixedPrecisionModule`).
+        if len(output) == 2:
+            last_hidden_state = output[0]
+        else:
+            last_hidden_state = output
+        features = last_hidden_state[:, 0]
         return features.cpu().numpy()
 
 
@@ -136,6 +145,14 @@ class PhikonV2(Extractor):
         -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
-        outputs = self.feature_extractor(images.to(self.device))
-        features = outputs.last_hidden_state[:, 0, :]
+        output = self.feature_extractor(images.to(self.device))
+        # If mixed precision is disabled, then the output is a list of
+        # 2 items: last_hidden_state and pooler_output.
+        # We only extract the hidden state, which is already handled
+        # when mixed precision is enabled (see `plismbench.models.utils.MixedPrecisionModule`).
+        if len(output) == 2:
+            last_hidden_state = output[0]
+        else:
+            last_hidden_state = output
+        features = last_hidden_state[:, 0]
         return features.cpu().numpy()

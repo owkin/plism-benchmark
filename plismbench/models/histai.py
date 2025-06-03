@@ -72,8 +72,16 @@ class HibouBase(Extractor):
         -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
-        outputs = self.feature_extractor(images.to(self.device))
-        features = outputs.last_hidden_state[:, 0, :]
+        output = self.feature_extractor(images.to(self.device))
+        # If mixed precision is disabled, then the output is a list of
+        # 2 items: last_hidden_state and pooler_output.
+        # We only extract the hidden state, which is already handled
+        # when mixed precision is enabled (see `plismbench.models.utils.MixedPrecisionModule`).
+        if len(output) == 2:
+            last_hidden_state = output[0]
+        else:
+            last_hidden_state = output
+        features = last_hidden_state[:, 0]
         return features.cpu().numpy()
 
 
@@ -138,6 +146,14 @@ class HibouLarge(Extractor):
         -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
-        outputs = self.feature_extractor(images.to(self.device))
-        features = outputs.last_hidden_state[:, 0, :]
+        output = self.feature_extractor(images.to(self.device))
+        # If mixed precision is disabled, then the output is a list of
+        # 2 items: last_hidden_state and pooler_output.
+        # We only extract the hidden state, which is already handled
+        # when mixed precision is enabled (see `plismbench.models.utils.MixedPrecisionModule`).
+        if len(output) == 2:
+            last_hidden_state = output[0]
+        else:
+            last_hidden_state = output
+        features = last_hidden_state[:, 0]
         return features.cpu().numpy()

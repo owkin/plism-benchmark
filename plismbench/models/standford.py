@@ -71,5 +71,10 @@ class PLIP(Extractor):
         -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
-        features = self.feature_extractor.get_image_features(images.to(self.device))  # type: ignore
+        if self.mixed_precision:
+            features = self.feature_extractor.module.get_image_features(  # type: ignore
+                images.to(self.device)
+            )
+        else:
+            features = self.feature_extractor.get_image_features(images.to(self.device))  # type: ignore
         return features.cpu().numpy()

@@ -40,42 +40,32 @@ class FeatureExtractorsEnum(StringEnum):
     H0_MINI = "h0_mini"
     HOPTIMUS0 = "hoptimus0"
     HOPTIMUS1 = "hoptimus1"
-
     # Kaiko AI
     KAIKO_VIT_BASE = "kaiko_vit_base"
     KAIKO_VIT_LARGE = "kaiko_vit_large"
     MIDNIGHT_12K = "midnight_12k"
-
     # Paige AI
     VIRCHOW = "virchow"
     VIRCHOW2 = "virchow2"
-
     # Microsoft
     PROVGIGAPATH = "provgigapath"
-
     # Mahmood Lab
     CONCH = "conch"
     CONCHV15 = "conchv15"
     UNI = "uni"
     UNI2H = "uni2h"
-
     # HistAI
     HIBOU_BASE = "hibou_base"
     HIBOU_LARGE = "hibou_large"
-
     # Owkin
     PHIKON = "phikon"
     PHIKONV2 = "phikonv2"
-
     # HKUST
     GPFM = "gpfm"
-
     # Standford
     PLIP = "plip"
-
     # Lunit
     LUNIT_VIT_SMALL_8 = "lunit_vit_small_8"
-
     # Meta
     DINOV2_VIT_GIANT = "dinov2_vit_giant"
 

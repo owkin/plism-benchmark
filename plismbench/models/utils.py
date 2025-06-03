@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import torch
 from transformers.models.dinov2.modeling_dinov2 import Dinov2Model
+from transformers.models.vit.modeling_vit import ViTModel
 
 
 DEFAULT_DEVICE = (
@@ -24,7 +25,14 @@ class MixedPrecisionModule(torch.nn.Module):
         super(MixedPrecisionModule, self).__init__()
         self.module = module
         self.device_type = device_type
-        self.is_dinov2_model = isinstance(self.module, Dinov2Model)
+        # If output tensors are ``transformers.modeling_outputs.BaseModelOutputWithPooling``
+        # `Dinov2Model` is used for Midnight-12k
+        # `Dinov2ModelWithRegisters` is used for Hibou models
+        # `ViTModel` is used for Phikon
+        self.return_w_pooling = (
+            isinstance(self.module, (Dinov2Model, ViTModel))
+            or type(self.module).__name__ == "Dinov2ModelWithRegisters"
+        )
 
     def forward(self, *args, **kwargs):
         """Forward pass using ``autocast``."""
@@ -32,9 +40,9 @@ class MixedPrecisionModule(torch.nn.Module):
         with torch.amp.autocast(device_type=self.device_type):
             output = self.module(*args, **kwargs)
             # Only retrieve the last hidden layer state from
-            # transformers.modeling_outputs.BaseModelOutputWithPooling
-            if self.is_dinov2_model:
-                output = output[0]  # second item is the `pooler_output`
+            # ``transformers.modeling_outputs.BaseModelOutputWithPooling``
+            if self.return_w_pooling:
+                output = output[0]  # first item is the last hidden state
 
         if not isinstance(output, torch.Tensor):
             raise ValueError(

@@ -234,9 +234,14 @@ class CONCH(Extractor):
         -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
-        features = self.feature_extractor.encode_image(  # type: ignore
-            images.to(self.device), proj_contrast=False, normalize=False
-        )
+        if self.mixed_precision:
+            features = self.feature_extractor.module.encode_image(  # type: ignore
+                images.to(self.device), proj_contrast=False, normalize=False
+            )
+        else:
+            features = self.feature_extractor.encode_image(  # type: ignore
+                images.to(self.device), proj_contrast=False, normalize=False
+            )
         return features.cpu().numpy()
 
 
