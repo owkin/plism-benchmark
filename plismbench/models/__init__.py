@@ -60,8 +60,8 @@ class FeatureExtractorsEnum(StringEnum):
     UNI2H = "uni2h"
 
     # HistAI
-    HIBOU_BASE = HibouBase
-    HIBOU_LARGE = HibouLarge
+    HIBOU_BASE = "hibou_base"
+    HIBOU_LARGE = "hibou_large"
 
     # Owkin
     PHIKON = "phikon"
