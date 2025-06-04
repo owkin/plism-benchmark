@@ -57,6 +57,8 @@ def collate(
 
 def resume_streaming(
     export_dir: Path,
+    slide_features: list[np.ndarray],
+    current_num_tiles: int,
     slide_features_export_path: Path,
     feature_extractor: Extractor,
     slide_ids: list[str],
@@ -65,11 +67,10 @@ def resume_streaming(
     reference_slide_id: str,
 ) -> tuple[list[np.ndarray], bool, int]:
     """Resume streaming without re-extracting slides."""
-    slide_features: list[np.ndarray] = []
     set_continue = False
-    current_num_tiles = 0
     # If the current slide has features already available
     if slide_features_export_path.exists():
+        set_continue = True
         # Check that the batch contains all tiles from the same slide
         next_slide_id = slide_ids[-1]
         # Otherwise enter a specific condition
@@ -83,7 +84,6 @@ def resume_streaming(
                 logger.info(
                     f"Features for slide {next_slide_id} already extracted, skipping..."
                 )
-                set_continue = True
             # Otherwise, start the feature extraction by adding the tiles from
             # slide N+1 into `slide_features`
             else:
@@ -95,14 +95,12 @@ def resume_streaming(
                 batch_stack = process_imgs(
                     imgs[:idx], tile_ids[:idx], model=feature_extractor
                 )
-                current_num_tiles = batch_stack.shape[0]
+                current_num_tiles += batch_stack.shape[0]
                 slide_features.append(batch_stack)
-                set_continue = True
         else:
             logger.info(
                 f"Features for slide {reference_slide_id} already extracted, skipping..."
             )
-            set_continue = True
     return slide_features, set_continue, current_num_tiles
 
 
@@ -161,6 +159,8 @@ def run_extract_streaming(
         if not overwrite:
             slide_features, continue_, current_num_tiles = resume_streaming(
                 export_dir=export_dir,
+                slide_features=slide_features,
+                current_num_tiles=current_num_tiles,
                 slide_features_export_path=slide_features_export_path,
                 feature_extractor=feature_extractor,
                 slide_ids=slide_ids,
