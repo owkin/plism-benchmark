@@ -126,7 +126,6 @@ def run_extract_streaming(
         # If we're on the same slide, we just add the batch features to the running list
         if all(slide_id == reference_slide_id for slide_id in slide_ids):
             batch_stack = process_imgs(imgs, tile_ids, model=feature_extractor)
-            print(batch_stack.shape)
             slide_features.append(batch_stack)
             # For the very last slide, the last batch may be of size < `batch_size`
             current_num_tiles += batch_stack.shape[0]
@@ -153,7 +152,6 @@ def run_extract_streaming(
             batch_stack = process_imgs(
                 imgs[:idx], tile_ids[:idx], model=feature_extractor
             )
-            print(batch_stack.shape)
             slide_features.append(batch_stack)
             save_features(
                 slide_features,
