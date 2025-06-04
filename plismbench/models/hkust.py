@@ -53,6 +53,7 @@ class GPFM(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 1024
         self.mixed_precision = mixed_precision
 
         _state_dict_path = download_state_dict(

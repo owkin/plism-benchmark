@@ -41,6 +41,7 @@ class UNI(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 1024
         self.mixed_precision = mixed_precision
 
         timm_kwargs: dict[str, Any] = {
@@ -111,6 +112,7 @@ class UNI2h(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 1536
         self.mixed_precision = mixed_precision
 
         timm_kwargs: dict[str, Any] = {
@@ -192,6 +194,7 @@ class CONCH(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 512
         self.mixed_precision = mixed_precision
 
         checkpoint_dir = snapshot_download(repo_id="MahmoodLab/CONCH")
@@ -234,14 +237,9 @@ class CONCH(Extractor):
         -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
-        if self.mixed_precision:
-            features = self.feature_extractor.module.encode_image(  # type: ignore
-                images.to(self.device), proj_contrast=False, normalize=False
-            )
-        else:
-            features = self.feature_extractor.encode_image(  # type: ignore
-                images.to(self.device), proj_contrast=False, normalize=False
-            )
+        features = self.feature_extractor.module.encode_image(  # type: ignore
+            images.to(self.device), proj_contrast=False, normalize=False
+        )
         return features.cpu().numpy()
 
 
@@ -258,6 +256,7 @@ class CONCHv15(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 768
         self.mixed_precision = mixed_precision
 
         titan = AutoModel.from_pretrained("MahmoodLab/TITAN", trust_remote_code=True)

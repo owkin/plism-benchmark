@@ -35,6 +35,7 @@ class LunitViTS8(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 384
         self.mixed_precision = mixed_precision
 
         feature_extractor = VisionTransformer(

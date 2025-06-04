@@ -39,7 +39,7 @@ class FeatureExtractorsEnum(StringEnum):
     # Bioptimus
     H0_MINI = "h0_mini"
     HOPTIMUS0 = "hoptimus0"
-    HOPTIMUS1 = "hoptimus1"
+    # HOPTIMUS1 = "hoptimus1" # access not granted for now
     # Kaiko AI
     KAIKO_VIT_BASE = "kaiko_vit_base"
     KAIKO_VIT_LARGE = "kaiko_vit_large"
@@ -69,132 +69,138 @@ class FeatureExtractorsEnum(StringEnum):
     # Meta
     DINOV2_VIT_GIANT = "dinov2_vit_giant"
 
-    def init(self, device: int | list[int] | None, **kwargs) -> Extractor:  # noqa: PLR0911, PLR0912
-        """Initialize the feature extractor."""
+    def init(  # noqa: PLR0911, PLR0912
+        self,
+        device: int | list[int] | None,
+        mixed_precision: bool = True,
+        **kwargs,
+    ) -> Extractor:
+        """Initialize the feature extractor. Mixed precision is set by default."""
         if self is self.H0_MINI:
             return H0Mini(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.HOPTIMUS0:
             return HOptimus0(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
-        elif self is self.HOPTIMUS1:
-            return HOptimus1(
-                device=device,
-                mixed_precision=True,  # don't change this value
-                **kwargs,
-            )
+        # access not granted for now
+        # elif self is self.HOPTIMUS1:
+        #     return HOptimus1(
+        #         device=device,
+        #         mixed_precision=mixed_precision,
+        #         **kwargs,
+        #     )
         elif self is self.KAIKO_VIT_BASE:
             return KaikoViTBase(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.KAIKO_VIT_LARGE:
             return KaikoViTLarge(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.MIDNIGHT_12K:
             return Midnight12k(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.VIRCHOW:
             return Virchow(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.VIRCHOW2:
             return Virchow2(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.PROVGIGAPATH:
             return ProvGigaPath(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.CONCH:
             return CONCH(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.CONCHV15:
             return CONCHv15(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.UNI:
             return UNI(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.UNI2H:
             return UNI2h(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.HIBOU_BASE:
             return HibouBase(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.HIBOU_LARGE:
             return HibouLarge(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.PHIKON:
             return Phikon(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.PHIKONV2:
             return PhikonV2(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.GPFM:
             return GPFM(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.PLIP:
             return PLIP(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.DINOV2_VIT_GIANT:
             return Dinov2ViTGiant(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         elif self is self.LUNIT_VIT_SMALL_8:
             return LunitViTS8(
                 device=device,
-                mixed_precision=True,  # don't change this value
+                mixed_precision=mixed_precision,
                 **kwargs,
             )
         else:

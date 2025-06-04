@@ -36,6 +36,7 @@ class HOptimus0(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 1536
         self.mixed_precision = mixed_precision
 
         timm_kwargs: dict[str, Any] = {
@@ -108,6 +109,7 @@ class H0Mini(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 768
         self.mixed_precision = mixed_precision
 
         timm_kwargs: dict[str, Any] = {
@@ -151,8 +153,8 @@ class H0Mini(Extractor):
         -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
-        features = self.feature_extractor(images.to(self.device))
-        features = features[:, 0]  # only cls token
+        last_hidden_state = self.feature_extractor(images.to(self.device))
+        features = last_hidden_state[:, 0]  # only cls token
         return features.cpu().numpy()
 
 
@@ -181,6 +183,7 @@ class HOptimus1(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 1536
         self.mixed_precision = mixed_precision
 
         timm_kwargs: dict[str, Any] = {

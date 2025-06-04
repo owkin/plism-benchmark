@@ -185,6 +185,11 @@ Please check `notebooks/visualization.ipynb` for details.
 ## Contribute
 
 Please refer to our [documentation](https://owkin.github.io/plism-benchmark) to follow our contribution guidelines.
+To add a new feature extractor:
+- Create a `.py` file with your organization id (e.g. `owkin.py`) or re-use an existing one in `plismbench.models`
+- Add a class inheriting from `Extractor` (please refer to other models implementation for guidance)
+- Add your model in `FeatureExtractorsEnum` located in `plismbench.models.__init__`
+- Don't forget to test it in `tests/models/test_extractors.py`
 
 > [!IMPORTANT]
 > Please report the output of `get_leaderboard_results` in your PR description as illustrated above, along with the number of tiles used to compute the metrics.

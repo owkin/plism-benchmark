@@ -34,6 +34,7 @@ class PLIP(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 512
         self.mixed_precision = mixed_precision
 
         self.processor = AutoProcessor.from_pretrained("vinid/plip")
@@ -71,10 +72,7 @@ class PLIP(Extractor):
         -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
-        if self.mixed_precision:
-            features = self.feature_extractor.module.get_image_features(  # type: ignore
-                images.to(self.device)
-            )
-        else:
-            features = self.feature_extractor.get_image_features(images.to(self.device))  # type: ignore
+        features = self.feature_extractor.module.get_image_features(  # type: ignore
+            images.to(self.device)
+        )
         return features.cpu().numpy()

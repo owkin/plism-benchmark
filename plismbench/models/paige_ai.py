@@ -36,6 +36,7 @@ class Virchow(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 2560
         self.mixed_precision = mixed_precision
 
         timm_kwargs: dict[str, Any] = {
@@ -79,9 +80,9 @@ class Virchow(Extractor):
         -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
-        features = self.feature_extractor(images.to(self.device))
-        class_token = features[:, 0]
-        patch_tokens = features[:, 1:]
+        last_hidden_state = self.feature_extractor(images.to(self.device))
+        class_token = last_hidden_state[:, 0]
+        patch_tokens = last_hidden_state[:, 1:]
         features = torch.cat([class_token, patch_tokens.mean(1)], dim=-1)
         return features.cpu().numpy()
 
@@ -111,6 +112,7 @@ class Virchow2(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 2560
         self.mixed_precision = mixed_precision
 
         timm_kwargs: dict[str, Any] = {
@@ -154,8 +156,8 @@ class Virchow2(Extractor):
         -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
-        features = self.feature_extractor(images.to(self.device))
-        class_token = features[:, 0]
-        patch_tokens = features[:, 5:]
+        last_hidden_state = self.feature_extractor(images.to(self.device))
+        class_token = last_hidden_state[:, 0]
+        patch_tokens = last_hidden_state[:, 5:]
         features = torch.cat([class_token, patch_tokens.mean(1)], dim=-1)
         return features.cpu().numpy()

@@ -34,6 +34,7 @@ class KaikoViTBase(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 768
         self.mixed_precision = mixed_precision
 
         feature_extractor = torch.hub.load(
@@ -103,6 +104,7 @@ class KaikoViTLarge(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 1024
         self.mixed_precision = mixed_precision
 
         feature_extractor = torch.hub.load(
@@ -172,6 +174,7 @@ class Midnight12k(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 3072
         self.mixed_precision = mixed_precision
 
         feature_extractor = AutoModel.from_pretrained("kaiko-ai/midnight")
@@ -210,15 +213,7 @@ class Midnight12k(Extractor):
         -------
             torch.Tensor: Tensor of size (n_tiles, features_dim).
         """
-        output = self.feature_extractor(images.to(self.device))
-        # If mixed precision is disabled, then the output is a list of
-        # 2 items: last_hidden_state and pooler_output.
-        # We only extract the hidden state, which is already handled
-        # when mixed precision is enabled (see `plismbench.models.utils.MixedPrecisionModule`).
-        if len(output) == 2:
-            last_hidden_state = output[0]
-        else:
-            last_hidden_state = output
+        last_hidden_state = self.feature_extractor(images.to(self.device))
         class_token = last_hidden_state[:, 0]
         patch_tokens = last_hidden_state[:, 1:]
         features = torch.cat([class_token, patch_tokens.mean(1)], dim=-1)

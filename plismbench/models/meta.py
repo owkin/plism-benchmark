@@ -33,6 +33,7 @@ class Dinov2ViTGiant(Extractor):
         mixed_precision: bool = False,
     ):
         super().__init__()
+        self.output_dim = 1536
         self.mixed_precision = mixed_precision
 
         feature_extractor = torch.hub.load(

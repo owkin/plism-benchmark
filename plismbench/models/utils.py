@@ -3,8 +3,7 @@
 from __future__ import annotations
 
 import torch
-from transformers.models.dinov2.modeling_dinov2 import Dinov2Model
-from transformers.models.vit.modeling_vit import ViTModel
+from transformers.modeling_outputs import BaseModelOutputWithPooling
 
 
 DEFAULT_DEVICE = (
@@ -12,8 +11,8 @@ DEFAULT_DEVICE = (
 )
 
 
-class MixedPrecisionModule(torch.nn.Module):
-    """Mixed Precision Module wrapper.
+class PrecisionModule(torch.nn.Module):
+    """Precision Module wrapper.
 
     Parameters
     ----------
@@ -21,33 +20,31 @@ class MixedPrecisionModule(torch.nn.Module):
     device_type: str
     """
 
-    def __init__(self, module: torch.nn.Module, device_type: str):
-        super(MixedPrecisionModule, self).__init__()
+    def __init__(
+        self, module: torch.nn.Module, device_type: str, mixed_precision: bool
+    ):
+        super(PrecisionModule, self).__init__()
         self.module = module
         self.device_type = device_type
-        # If output tensors are ``transformers.modeling_outputs.BaseModelOutputWithPooling``
-        # `Dinov2Model` is used for Midnight-12k
-        # `Dinov2ModelWithRegisters` is used for Hibou models
-        # `ViTModel` is used for Phikon
-        self.return_w_pooling = (
-            isinstance(self.module, (Dinov2Model, ViTModel))
-            or type(self.module).__name__ == "Dinov2ModelWithRegisters"
-        )
+        self.mixed_precision = mixed_precision
 
     def forward(self, *args, **kwargs):
-        """Forward pass using ``autocast``."""
+        """Forward pass w/ or w/o ``autocast``."""
         # Mixed precision forward
-        with torch.amp.autocast(device_type=self.device_type):
+        if self.mixed_precision:
+            with torch.amp.autocast(device_type=self.device_type):
+                output = self.module(*args, **kwargs)
+        # Full precision forward
+        else:
             output = self.module(*args, **kwargs)
-            # Only retrieve the last hidden layer state from
-            # ``transformers.modeling_outputs.BaseModelOutputWithPooling``
-            if self.return_w_pooling:
-                output = output[0]  # first item is the last hidden state
-
-        if not isinstance(output, torch.Tensor):
-            raise ValueError(
-                "MixedPrecisionModule currently only supports models returning a single tensor."
-            )
+        if isinstance(output, BaseModelOutputWithPooling):
+            if "last_hidden_state" in output.keys():
+                output = output.last_hidden_state
+            else:
+                raise ValueError(
+                    "Model output has class `BaseModelOutputWithPooling` "
+                    "but no `'last_hidden_state'` attribute."
+                )
         # Back to float32
         return output.to(torch.float32)
 
@@ -82,9 +79,11 @@ def prepare_module(
     if mixed_precision:
         if not (torch.cuda.is_available() or device == -1):
             raise ValueError("Mixed precision in only available for CUDA GPUs and CPU.")
-        module = MixedPrecisionModule(
-            module, device_type="cpu" if not torch.cuda.is_available() else "cuda"
-        )
+    module = PrecisionModule(
+        module,
+        device_type="cpu" if not torch.cuda.is_available() else "cuda",
+        mixed_precision=mixed_precision,
+    )
 
     device_: str | torch.device
 
