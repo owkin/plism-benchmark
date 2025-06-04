@@ -67,7 +67,7 @@ class FeatureExtractorsEnum(StringEnum):
     # Lunit
     LUNIT_VIT_SMALL_8 = "lunit_vit_small_8"
     # Meta
-    DINOV2_VIT_GIANT = "dinov2_vit_giant"
+    DINOV2_VIT_GIANT_IMAGENET = "dinov2_vit_giant_imagenet"
 
     def init(  # noqa: PLR0911, PLR0912
         self,
@@ -191,7 +191,7 @@ class FeatureExtractorsEnum(StringEnum):
                 mixed_precision=mixed_precision,
                 **kwargs,
             )
-        elif self is self.DINOV2_VIT_GIANT:
+        elif self is self.DINOV2_VIT_GIANT_IMAGENET:
             return Dinov2ViTGiant(
                 device=device,
                 mixed_precision=mixed_precision,

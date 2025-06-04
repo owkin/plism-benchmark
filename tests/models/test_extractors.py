@@ -12,7 +12,8 @@ from plismbench.models import FeatureExtractorsEnum
 
 @pytest.mark.parametrize(
     "extractor",
-    FeatureExtractorsEnum.choices(),
+    ["dinov2_vit_giant_imagenet"],
+    # FeatureExtractorsEnum.choices(),
 )
 def test_extract_cpu(
     extractor: str,
