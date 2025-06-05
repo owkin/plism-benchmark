@@ -139,7 +139,6 @@ def run_extract_h5(
         device=device
     )
     image_transform = feature_extractor.transform
-    device = feature_extractor.device
 
     slide_h5_paths = list(download_dir.glob("*.tif.h5"))
     assert (n_slides := len(slide_h5_paths)) == NUM_SLIDES, (

@@ -6,6 +6,8 @@ import numpy as np
 import pandas as pd
 import torch
 
+from plismbench.models.extractor import Extractor
+
 
 # Do not touch those values as PLISM dataset contains 91 slides x 16278 tiles
 NUM_SLIDES: int = 91
@@ -46,7 +48,7 @@ def save_features(
 
 
 def process_imgs(
-    imgs: torch.Tensor, tile_ids: list[str], model: torch.nn.Module
+    imgs: torch.Tensor, tile_ids: list[str], model: Extractor
 ) -> np.ndarray:
     """Perform inference on input (already transformed) images.
 
@@ -56,7 +58,7 @@ def process_imgs(
         Transformed images (e.g. normalized, cropped, etc.).
     tile_ids: list[str]:
         List of tile ids.
-    model: torch.nn.Module
+    model: Extractor
         Feature extractor.
     """
     with torch.inference_mode():

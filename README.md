@@ -185,6 +185,11 @@ Please check `notebooks/visualization.ipynb` for details.
 ## Contribute
 
 Please refer to our [documentation](https://owkin.github.io/plism-benchmark) to follow our contribution guidelines.
+To add a new feature extractor:
+- Create a `.py` file with your organization id (e.g. `owkin.py`) or re-use an existing one in `plismbench.models`
+- Add a class inheriting from `Extractor` (please refer to other models implementation for guidance)
+- Add your model in `FeatureExtractorsEnum` located in `plismbench.models.__init__`
+- Don't forget to test it in `tests/models/test_extractors.py`
 
 > [!IMPORTANT]
 > Please report the output of `get_leaderboard_results` in your PR description as illustrated above, along with the number of tiles used to compute the metrics.
@@ -206,13 +211,23 @@ We thank PLISM dataset's authors for their unique contribution.
 ## How to cite
 
 If you are using this dataset, please cite the original article (Ochi et al., 2024) and our work as follows:
-_to be completed_
+
+Filiot, A., Dop, N., Tchita, O., Riou, A., Peeters, T., Valter, D., Scalbert, M., Saillard, C., Robin, G., & Olivier, A. (2025). Distilling foundation models for robust and efficient models in digital pathology. arXiv. https://arxiv.org/abs/2501.16239
+
+or
+
+```
+@misc{filiot2025distillingfoundationmodelsrobust,
+      title={Distilling foundation models for robust and efficient models in digital pathology},
+      author={Alexandre Filiot and Nicolas Dop and Oussama Tchita and Auriane Riou and Thomas Peeters and Daria Valter and Marin Scalbert and Charlie Saillard and Geneviève Robin and Antoine Olivier},
+      year={2025},
+      eprint={2501.16239},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2501.16239},
+}
+```
 
 ## References
 
 - (Ochi et al., 2024) Ochi, M., Komura, D., Onoyama, T. et al. Registered multi-device/staining histology image dataset for domain-agnostic machine learning models. Sci Data 11, 330 (2024).
-
-
-## TODO
-- [ ] Add more tests
-- [ ] Add latest models implementation

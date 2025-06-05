@@ -22,6 +22,7 @@ from plismbench.engine.extract.utils import (
     save_features,
 )
 from plismbench.models import FeatureExtractorsEnum
+from plismbench.models.extractor import Extractor
 
 
 def collate(
@@ -54,17 +55,66 @@ def collate(
     return output
 
 
+def resume_streaming(
+    export_dir: Path,
+    slide_features: list[np.ndarray],
+    current_num_tiles: int,
+    slide_features_export_path: Path,
+    feature_extractor: Extractor,
+    slide_ids: list[str],
+    tile_ids: list[str],
+    imgs: torch.Tensor,
+    reference_slide_id: str,
+) -> tuple[list[np.ndarray], bool, int]:
+    """Resume streaming without re-extracting slides."""
+    set_continue = False
+    # If the current slide has features already available
+    if slide_features_export_path.exists():
+        set_continue = True
+        # Check that the batch contains all tiles from the same slide
+        next_slide_id = slide_ids[-1]
+        # Otherwise enter a specific condition
+        if next_slide_id != reference_slide_id:
+            next_slide_features_export_dir = Path(export_dir / next_slide_id)
+            next_slide_features_export_path = (
+                next_slide_features_export_dir / "features.npy"
+            )
+            # If the next slide was also already extracted, skip
+            if next_slide_features_export_path.exists():
+                logger.info(
+                    f"Features for slide {next_slide_id} already extracted, skipping..."
+                )
+            # Otherwise, start the feature extraction by adding the tiles from
+            # slide N+1 into `slide_features`
+            else:
+                # New slide without features detected is `next_slide_id`.
+                # We retrieve the maximum index at which all tiles in the batch comes from slide N
+                mask = np.array(slide_ids) != reference_slide_id
+                idx = mask.argmax()
+                # And only process the later, then export the slides features
+                batch_stack = process_imgs(
+                    imgs[:idx], tile_ids[:idx], model=feature_extractor
+                )
+                current_num_tiles += batch_stack.shape[0]
+                slide_features.append(batch_stack)
+        else:
+            logger.info(
+                f"Features for slide {reference_slide_id} already extracted, skipping..."
+            )
+    return slide_features, set_continue, current_num_tiles
+
+
 def run_extract_streaming(
     feature_extractor_name: str,
     batch_size: int,
     device: int,
     export_dir: Path,
-    overwrite: bool = False,
+    overwrite: bool,
 ) -> None:
     """Run features extraction with streaming."""
+    logger.info(f"Export directory set to {str(export_dir)}.")
     if overwrite:
         logger.warning("You are about to overwrite existing features.")
-    logger.info(f"Export directory set to {str(export_dir)}.")
 
     # Create export directory if it doesn't exist
     export_dir.mkdir(exist_ok=True, parents=True)
@@ -74,7 +124,6 @@ def run_extract_streaming(
         device=device
     )
     image_transform = feature_extractor.transform
-    device = feature_extractor.device
 
     # Create the dataset and dataloader without actually loading the files to disk (`streaming=True`)
     # The dataset is sorted by slide_id, meaning that the first 16278 indexes belong to the same first slide,
@@ -93,11 +142,9 @@ def run_extract_streaming(
     )
 
     # Iterate over the full dataset and store features each time 16278 input images have been processed
-
-    slide_features = []
+    slide_features: list[np.ndarray] = []
     current_num_tiles = 0
 
-    existing_slide_already_checked = False
     for slide_ids, tile_ids, imgs in tqdm(
         dataloader,
         total=ceil(NUM_SLIDES * NUM_TILES_PER_SLIDE / batch_size),
@@ -108,21 +155,21 @@ def run_extract_streaming(
         # Get output path for features
         slide_features_export_dir = Path(export_dir / reference_slide_id)
         slide_features_export_path = slide_features_export_dir / "features.npy"
-
-        if slide_features_export_path.exists():
-            if not existing_slide_already_checked:
-                if overwrite:
-                    logger.info(
-                        f"Features for slide {reference_slide_id} already extracted. Overwriting..."
-                    )
-                    existing_slide_already_checked = True
-                else:
-                    logger.info(
-                        f"Features for slide {reference_slide_id} already extracted. Skipping..."
-                    )
-                    existing_slide_already_checked = True
-                    continue
         slide_features_export_dir.mkdir(exist_ok=True, parents=True)
+        if not overwrite:
+            slide_features, continue_, current_num_tiles = resume_streaming(
+                export_dir=export_dir,
+                slide_features=slide_features,
+                current_num_tiles=current_num_tiles,
+                slide_features_export_path=slide_features_export_path,
+                feature_extractor=feature_extractor,
+                slide_ids=slide_ids,
+                tile_ids=tile_ids,
+                imgs=imgs,
+                reference_slide_id=reference_slide_id,
+            )
+            if continue_:
+                continue
 
         # If we're on the same slide, we just add the batch features to the running list
         if all(slide_id == reference_slide_id for slide_id in slide_ids):
@@ -143,7 +190,6 @@ def run_extract_streaming(
                 )
                 slide_features = []
                 current_num_tiles = 0
-                existing_slide_already_checked = False
         # The current batch contains tiles from slide N (`reference_slide_id`) and slide N+1
         else:
             # We retrieve the maximum index at which all tiles in the batch comes from slide N
@@ -153,6 +199,7 @@ def run_extract_streaming(
             batch_stack = process_imgs(
                 imgs[:idx], tile_ids[:idx], model=feature_extractor
             )
+            current_num_tiles += batch_stack.shape[0]
             slide_features.append(batch_stack)
             save_features(
                 slide_features,
@@ -168,4 +215,3 @@ def run_extract_streaming(
                 process_imgs(imgs[idx:], tile_ids[idx:], model=feature_extractor)
             ]
             current_num_tiles = batch_size - idx
-            existing_slide_already_checked = False
