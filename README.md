@@ -24,16 +24,17 @@ On 03/03/2025.
 | CONCH          |                     0.846 |                             0.752 |                              0.241 |                                             0.155 |                0.498 | #2     |
 | H-Optimus-0    |                     0.685 |                             0.744 |                              0.327 |                                             0.166 |                0.480 | #3     |
 | Virchow2       |                     0.777 |                             0.609 |                              0.306 |                                             0.163 |                0.464 | #4     |
-| Prov-GigaPath  |                     0.570 |                             0.592 |                              0.118 |                                             0.054 |                0.333 | #5     |
-| UNI2-h         |                     0.591 |                             0.501 |                              0.190 |                                             0.046 |                0.332 | #6     |
-| Kaiko ViT-B/8  |                     0.764 |                             0.346 |                              0.147 |                                             0.045 |                0.325 | #7     |
-| UNI            |                     0.547 |                             0.532 |                              0.169 |                                             0.053 |                0.325 | #8     |
-| GPFM           |                     0.594 |                             0.356 |                              0.092 |                                             0.017 |                0.265 | #9     |
-| PLIP           |                     0.878 |                             0.054 |                              0.040 |                                             0.004 |                0.244 | #10    |
-| Phikon         |                     0.622 |                             0.125 |                              0.021 |                                             0.004 |                0.193 | #11    |
-| Kaiko ViT-L/14 |                     0.569 |                             0.115 |                              0.041 |                                             0.006 |                0.183 | #12    |
-| Phikon v2      |                     0.557 |                             0.064 |                              0.030 |                                             0.003 |                0.164 | #13    |
-| Hibou Large    |                     0.490 |                             0.061 |                              0.030 |                                             0.008 |                0.147 | #14    |                                       0.008 |                0.147 | #14    |
+| Midnight-12k   |                     0.748 |                             0.435 |                              0.200 |                                             0.108 |                0.373 | #5     |
+| Prov-GigaPath  |                     0.570 |                             0.592 |                              0.118 |                                             0.054 |                0.333 | #6     |
+| UNI2-h         |                     0.591 |                             0.501 |                              0.190 |                                             0.046 |                0.332 | #7    |
+| UNI            |                     0.547 |                             0.532 |                              0.169 |                                             0.053 |                0.325 | #8    |
+| Kaiko ViT-B/8  |                     0.764 |                             0.346 |                              0.147 |                                             0.045 |                0.325 | #9    |
+| GPFM           |                     0.594 |                             0.356 |                              0.092 |                                             0.017 |                0.265 | #10    |
+| PLIP           |                     0.878 |                             0.054 |                              0.040 |                                             0.004 |                0.244 | #11    |
+| Phikon         |                     0.622 |                             0.125 |                              0.021 |                                             0.004 |                0.193 | #12    |
+| Kaiko ViT-L/14 |                     0.569 |                             0.115 |                              0.041 |                                             0.006 |                0.183 | #13    |
+| Phikon v2      |                     0.557 |                             0.064 |                              0.030 |                                             0.003 |                0.164 | #14    |
+| Hibou Large    |                     0.490 |                             0.061 |                              0.030 |                                             0.008 |                0.147 | #15    |
 
 Our robustness benchmark is based on two different metrics: top-10 accuracy and cosine similarity. These metrics are computed over 4,095 unique slide pairs. Through our evaluation pipeline, robustness metrics are computed for all pairs but also cross-scanner (fixed staining), cross-staining (fixed scanner) or cross-scanner and cross-staining. Details are available in the `results.csv` file generated as the end of the evaluation.
 
