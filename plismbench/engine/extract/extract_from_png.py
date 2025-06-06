@@ -93,7 +93,7 @@ def resume_streaming(
                 idx = mask.argmax()
                 # And only process the later, then export the slides features
                 batch_stack = process_imgs(
-                    imgs[:idx], tile_ids[:idx], model=feature_extractor
+                    imgs[idx:], tile_ids[idx:], model=feature_extractor
                 )
                 current_num_tiles += batch_stack.shape[0]
                 slide_features.append(batch_stack)
