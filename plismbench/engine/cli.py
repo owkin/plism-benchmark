@@ -75,8 +75,12 @@ def extract(
         $ plismbench extract --extractor h0_mini --batch-size 32 --export-dir $HOME/tmp/features/ --download-dir $HOME/tmp/slides/
 
     """
-    if extractor not in FeatureExtractorsEnum.choices():
-        raise NotImplementedError(f"Extractor {extractor} not supported.")
+    supported_feature_extractors = FeatureExtractorsEnum.choices()
+    if extractor not in supported_feature_extractors:
+        raise NotImplementedError(
+            f"Extractor {extractor} not supported."
+            f" Supported extractors are: {supported_feature_extractors}."
+        )
     run_extract(
         feature_extractor_name=extractor,
         export_dir=export_dir / extractor,

@@ -24,16 +24,17 @@ On 03/03/2025.
 | CONCH          |                     0.846 |                             0.752 |                              0.241 |                                             0.155 |                0.498 | #2     |
 | H-Optimus-0    |                     0.685 |                             0.744 |                              0.327 |                                             0.166 |                0.480 | #3     |
 | Virchow2       |                     0.777 |                             0.609 |                              0.306 |                                             0.163 |                0.464 | #4     |
-| Prov-GigaPath  |                     0.570 |                             0.592 |                              0.118 |                                             0.054 |                0.333 | #5     |
-| UNI2-h         |                     0.591 |                             0.501 |                              0.190 |                                             0.046 |                0.332 | #6     |
-| Kaiko ViT-B/8  |                     0.764 |                             0.346 |                              0.147 |                                             0.045 |                0.325 | #7     |
-| UNI            |                     0.547 |                             0.532 |                              0.169 |                                             0.053 |                0.325 | #8     |
-| GPFM           |                     0.594 |                             0.356 |                              0.092 |                                             0.017 |                0.265 | #9     |
-| PLIP           |                     0.878 |                             0.054 |                              0.040 |                                             0.004 |                0.244 | #10    |
-| Phikon         |                     0.622 |                             0.125 |                              0.021 |                                             0.004 |                0.193 | #11    |
-| Kaiko ViT-L/14 |                     0.569 |                             0.115 |                              0.041 |                                             0.006 |                0.183 | #12    |
-| Phikon v2      |                     0.557 |                             0.064 |                              0.030 |                                             0.003 |                0.164 | #13    |
-| Hibou Large    |                     0.490 |                             0.061 |                              0.030 |                                             0.008 |                0.147 | #14    |                                       0.008 |                0.147 | #14    |
+| Midnight-12k   |                     0.748 |                             0.435 |                              0.200 |                                             0.108 |                0.373 | #5     |
+| Prov-GigaPath  |                     0.570 |                             0.592 |                              0.118 |                                             0.054 |                0.333 | #6     |
+| UNI2-h         |                     0.591 |                             0.501 |                              0.190 |                                             0.046 |                0.332 | #7    |
+| UNI            |                     0.547 |                             0.532 |                              0.169 |                                             0.053 |                0.325 | #8    |
+| Kaiko ViT-B/8  |                     0.764 |                             0.346 |                              0.147 |                                             0.045 |                0.325 | #9    |
+| GPFM           |                     0.594 |                             0.356 |                              0.092 |                                             0.017 |                0.265 | #10    |
+| PLIP           |                     0.878 |                             0.054 |                              0.040 |                                             0.004 |                0.244 | #11    |
+| Phikon         |                     0.622 |                             0.125 |                              0.021 |                                             0.004 |                0.193 | #12    |
+| Kaiko ViT-L/14 |                     0.569 |                             0.115 |                              0.041 |                                             0.006 |                0.183 | #13    |
+| Phikon v2      |                     0.557 |                             0.064 |                              0.030 |                                             0.003 |                0.164 | #14    |
+| Hibou Large    |                     0.490 |                             0.061 |                              0.030 |                                             0.008 |                0.147 | #15    |
 
 Our robustness benchmark is based on two different metrics: top-10 accuracy and cosine similarity. These metrics are computed over 4,095 unique slide pairs. Through our evaluation pipeline, robustness metrics are computed for all pairs but also cross-scanner (fixed staining), cross-staining (fixed scanner) or cross-scanner and cross-staining. Details are available in the `results.csv` file generated as the end of the evaluation.
 
@@ -101,6 +102,8 @@ plismbench extract \
     --workers 8
 ```
 
+The output features directory will automatically be set to `export_dir/extractor`.
+
 **Specify ``--streaming`` if you want to perform the download of images on the fly without storing to disk.**
 
 
@@ -127,6 +130,8 @@ plismbench evaluate \
     --features-dir /your/features/previous/export/dir/ \
     --metrics-dir /your/metrics/export/dir/
 ```
+
+The input features directory will automatically be set to `export_dir/extractor`.
 
 > [!NOTE]
 > 1h is necessary to compute metrics for a ViT-B model, 16 CPUs and 1 Nvidia T4 (16Go).
@@ -181,6 +186,11 @@ Please check `notebooks/visualization.ipynb` for details.
 ## Contribute
 
 Please refer to our [documentation](https://owkin.github.io/plism-benchmark) to follow our contribution guidelines.
+To add a new feature extractor:
+- Create a `.py` file with your organization id (e.g. `owkin.py`) or re-use an existing one in `plismbench.models`
+- Add a class inheriting from `Extractor` (please refer to other models implementation for guidance)
+- Add your model in `FeatureExtractorsEnum` located in `plismbench.models.__init__`
+- Don't forget to test it in `tests/models/test_extractors.py`
 
 > [!IMPORTANT]
 > Please report the output of `get_leaderboard_results` in your PR description as illustrated above, along with the number of tiles used to compute the metrics.
@@ -202,13 +212,23 @@ We thank PLISM dataset's authors for their unique contribution.
 ## How to cite
 
 If you are using this dataset, please cite the original article (Ochi et al., 2024) and our work as follows:
-_to be completed_
+
+Filiot, A., Dop, N., Tchita, O., Riou, A., Peeters, T., Valter, D., Scalbert, M., Saillard, C., Robin, G., & Olivier, A. (2025). Distilling foundation models for robust and efficient models in digital pathology. arXiv. https://arxiv.org/abs/2501.16239
+
+or
+
+```
+@misc{filiot2025distillingfoundationmodelsrobust,
+      title={Distilling foundation models for robust and efficient models in digital pathology},
+      author={Alexandre Filiot and Nicolas Dop and Oussama Tchita and Auriane Riou and Thomas Peeters and Daria Valter and Marin Scalbert and Charlie Saillard and Geneviève Robin and Antoine Olivier},
+      year={2025},
+      eprint={2501.16239},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2501.16239},
+}
+```
 
 ## References
 
 - (Ochi et al., 2024) Ochi, M., Komura, D., Onoyama, T. et al. Registered multi-device/staining histology image dataset for domain-agnostic machine learning models. Sci Data 11, 330 (2024).
-
-
-## TODO
-- [ ] Add more tests
-- [ ] Add latest models implementation
