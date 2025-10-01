@@ -17,6 +17,8 @@ from plismbench.models.owkin import (
     AquaViT120M105k,
     AquaViT120M105kFilteredSubsampled,
     AquaViT120M105kFilteredSubsampledHed,
+    AquaViT120M315kFilteredSubsampled,
+    DinoV2150k,
     MidnightMini120M105kFilteredSubsampled,
     Phikon,
     PhikonV2,
@@ -69,12 +71,17 @@ class FeatureExtractorsEnum(StringEnum):
     PHIKONV2 = "phikonv2"
     AQUAVIT_120M_105K = "aquavit_120M_105k"
     AQUAVIT_120M_105K_FILTERED_SUBSAMPLED = "aquavit_120M_105k_filtered_subsampled"
+    AQUAVIT_120M_315K_FILTERED_SUBSAMPLED = "aquavit_120M_315k_filtered_subsampled"
     AQUAVIT_120M_105K_FILTERED_SUBSAMPLED_HED = (
         "aquavit_120M_105k_filtered_subsampled_hed"
     )
     MIDNIGHT_MINI_120M_105K_FILTERED_SUBSAMPLED = (
         "midnight_mini_120M_105k_filtered_subsampled"
     )
+    DINOV2_VIT_BASE_120M_150K_BASELINE = "dinov2_vit_base_120M_150k_baseline"
+    DINOV2_VIT_BASE_120M_150K_KDE_NOMASKING = "dinov2_vit_base_120M_150k_kde_nomasking"
+    DINOV2_VIT_BASE_120M_150K_KDE = "dinov2_vit_base_120M_150k_kde"
+    DINOV2_VIT_BASE_120M_150K_NOMASKING = "dinov2_vit_base_120M_150k_nomasking"
     # HKUST
     GPFM = "gpfm"
     # Standford
@@ -230,6 +237,12 @@ class FeatureExtractorsEnum(StringEnum):
                 mixed_precision=mixed_precision,
                 **kwargs,
             )
+        elif self is self.AQUAVIT_120M_315K_FILTERED_SUBSAMPLED:
+            return AquaViT120M315kFilteredSubsampled(
+                device=device,
+                mixed_precision=mixed_precision,
+                **kwargs,
+            )
         elif self is self.AQUAVIT_120M_105K_FILTERED_SUBSAMPLED_HED:
             return AquaViT120M105kFilteredSubsampledHed(
                 device=device,
@@ -238,6 +251,18 @@ class FeatureExtractorsEnum(StringEnum):
             )
         elif self is self.MIDNIGHT_MINI_120M_105K_FILTERED_SUBSAMPLED:
             return MidnightMini120M105kFilteredSubsampled(
+                device=device,
+                mixed_precision=mixed_precision,
+                **kwargs,
+            )
+        elif self in (
+            self.DINOV2_VIT_BASE_120M_150K_BASELINE,
+            self.DINOV2_VIT_BASE_120M_150K_KDE,
+            self.DINOV2_VIT_BASE_120M_150K_KDE_NOMASKING,
+            self.DINOV2_VIT_BASE_120M_150K_NOMASKING,
+        ):
+            return DinoV2150k(
+                weights=str(self),
                 device=device,
                 mixed_precision=mixed_precision,
                 **kwargs,
