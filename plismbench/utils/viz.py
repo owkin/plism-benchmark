@@ -31,6 +31,7 @@ EXTRACTOR_LABELS_DICT = {
     "virchow": "Virchow",
     "virchow2": "Virchow2",
     "genbio_pathfm": "GenBio-PathFM",
+    "mettle_1_5": "METTLE 1.5",
 }
 EXTRACTOR_PARAMETERS_DICT = {
     "conch": 86_000_000,
@@ -51,6 +52,7 @@ EXTRACTOR_PARAMETERS_DICT = {
     "virchow": 632_000_000,
     "virchow2": 632_000_000,
     "genbio_pathfm": 1_100_000_000,
+    "mettle_1_5": 1_100_000_000,
 }
 
 

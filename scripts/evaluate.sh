@@ -14,6 +14,7 @@ extractors=(
     plip
     conch
     genbio_pathfm
+    mettle_1_5
 )
 
 # List of number of tiles to compute metrics on: the reference for leaderboard is 8,139 !
